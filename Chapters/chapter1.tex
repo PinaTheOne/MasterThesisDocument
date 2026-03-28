@@ -40,7 +40,7 @@ Moreover, current solutions of autonomic computing are either fully centralized\
 \section*{Problem Statement}
 \label{sec:problem_statement}
 
-Centralized approaches to autonomic systems, in this context, are usually not scalable solutions\cite{Hiltunen1999, Garlan2004, Rosa2007}, as they are not conceived with decentralized systems in consideration. Decentralized approaches, involve each component managing itself or communicating with the remaining components for deciding and executing changes\cite{Quin2021, Weyns2012}. These solutions are usually very complex and also very network intensive, since they resort to complex protocols and solutions, which share these issues. For example, reconfigurations such as changing the stack of protocols usually requires the components involved having to reach a \textit{quiescent} state\cite{Rosa2012}. However, less complex reconfiguration actions, such as changing local protocol parameters, might be possible with different and less complex solutions. Supporting more complex reconfigurations limits the design of less complex ones, since for a system to support both, the same general architecture is used. If we consider only adaptation of protocol parameters, the need for complex solutions is no longer a concern, leading to new ways of achieving system reconfiguration. This presents us with a promising research direction, in large-scale decentralized systems, which have their protocol parameters managed by a centralized component\todo{Didn't understand if the issue is the word centralized.}.\todo{Review this}
+Centralized approaches to autonomic systems, in this context, are usually not scalable solutions\cite{Hiltunen1999, Garlan2004, Rosa2007}, as they are not conceived with decentralized systems in consideration. Decentralized approaches, involve each component managing itself or communicating with the remaining components for deciding and executing changes\cite{Quin2021, Weyns2012}. These solutions are usually very complex and also very network intensive, since they resort to complex protocols and solutions, which share these issues. For example, reconfigurations such as changing the stack of protocols usually requires the components involved having to reach a \textit{quiescent} state\cite{Rosa2012}. However, less complex reconfiguration actions, such as changing local protocol parameters, might be possible with different and less complex solutions. Supporting more complex reconfigurations limits the design of less complex ones, since for a system to support both, the same general architecture is used. If we consider only adaptation of protocol parameters, the need for complex solutions is no longer a concern, leading to new ways of achieving system reconfiguration. This presents us with a promising research direction, in large-scale decentralized systems, which have their protocol parameters managed by a centralized component\todo{Didn't understand if the issue is the word centralized.}
 
 \subsection*{Research Context}
 \label{sec_research_context}
@@ -54,7 +54,7 @@ Moreover, this work was also developed in the context of the \textbf{TaRDIS} (Tr
 "The project TaRDIS focuses on supporting the correct and efficient development of
 applications for swarms and decentralized distributed systems, by combining a novel
 programming paradigm with a toolbox for supporting the development and executing of
-applications" \cite{TARDIS2023}.\todo{Maybe I should move this somewhere else.}
+applications" \cite{TARDIS2023}.
 
 
 \section*{Objectives}
@@ -82,4 +82,5 @@ This document is structured as follows:
 \paragraph{Chapter~\ref{cha:overlord}} This chapter details the designed solution, mainly its components and how they interact to achieve the desired behavior. First we give a general overview of its architecture. Then we discuss monitoring of the system. Moreover, we detail how Overlord adapts parameters of protocols based on the monitored information of the system. Finally, we present how Overlord orchestrates such components to present us with a solution that works harmoniously to achieve its main objectives.
 
 \paragraph{Chapter~\ref{cha:evaluation}} In this chapter, we evaluate the proposed solution and its ability to improve performance of the overall system, through means of a case study. We describe the evaluation test-bed and evaluate its performance under specific environment conditions against alternatives without our solution.
+
 \paragraph{Chapter~\ref{cha:conclusion}} Finally, this chapter presents the final conclusions on the developed solution, delving into its contributions, and also clarifying its limitations, while also proposing possible future work.\todo{Review this.}

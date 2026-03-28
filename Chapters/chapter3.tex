@@ -113,7 +113,7 @@ Figure~\ref{fig:architecture} presents our proposed architecture. It illustrates
 	\item Collecting the metrics of protocols at each individual node
 	\item Transporting that information to the Overlord node.
 \end{inparaenum}
-Another aspect we address, is the aggregation of data along the network path to the Overlord node, which can improve efficiency of our solution. To address the monitoring of each individual node, as well as the aggregation of the data, we will use the already implemented Babel Metrics Framework\cite{Fouto2022,Paulico2025}, as further explained in Section~\ref{ssec:babel_metrics_framework}. For transportation of the data to the Overlord node, we developed an algorithm denominated as MON-Collect, explained in Section~\ref{ssec:moncollect}\todo{Cite MON, or the metrics framework, or something else?}.
+Another aspect we address, is the aggregation of data along the network path to the Overlord node, which can improve efficiency of our solution. To address the monitoring of each individual node, as well as the aggregation of the data, we will use the already implemented Babel Metrics Framework\cite{Fouto2022,Paulico2025}, as further explained in Section~\ref{ssec:babel_metrics_framework}. For transportation of the data to the Overlord node, we developed an algorithm denominated as MON-Collect, explained in Section~\ref{ssec:moncollect}\todo{Was I supposed to cite MON, or the metrics framework, or something else?}.
 
 \subsection{Integration with Babel Swarm Metrics Framework}
 \label{ssec:babel_metrics_framework}
@@ -226,7 +226,6 @@ This process is presented in Figure~\ref{fig:monitor_collect_phase}. The Overlor
 
 \subsubsection{Handling Failures in the Monitor-Collect Phase}
 \label{sssec:handling_failures_in_the_monitor_collect_phase}
-\todo[inline]{Maybe no subsubsection here}
 
 In case a node fails, there is also a configurable timeout value for the Monitor-Collect phase, however, since the tree is already created, the available information allows for a more sophisticated approach. If a node very close to the bottom of the tree has failed, then its parent node will wait a certain amount of time for its response. However, if all nodes wait the same amount, since messages between parent and child take time to reach their destination, nodes closer to the root will timeout before the parent of the node that failed can timeout and answer back to its parent. Consequentially, instead of simply losing information of one node (the one that failed), the information of that entire branch would be lost. Because of this, during the creation of the tree, each node reports to its parent (along with the \texttt{SESSION\_OK} message), the height of its subtree (with the node itself being the root of this subtree), denominated $h$\todo{This is very awkward here.}. For example, if a node has no children, then it will report $h = 0$. The parent node will then check all the $h$ values reported by its children, and report to its parent the highest $h+1$. There are also two more parameters (which are configurable), these being the base wait time $b$ and the modifier value $m$. The final wait time $t$ of each node is then calculated as $t = b + m\times h$. With this approach, if a node at the bottom of the tree fails, its parent will wait less time than a node at the top, and the parent node's timeout answer will reach its parent before they themselves timeout, effectively losing only the information of the failed node, and those below them.
 
@@ -246,7 +245,6 @@ Since Overlord is built on top of Babel, which uses TCP connections, when a node
 \end{figure}
 
 Before explaining the rest of the Overlord sequence, it is important to have a clear vision of how a full MON-Collect run could be, as well as how it interacts with other protocols. Figure~\ref{fig:full_mon_collect_execution}, illustrates a small portion of a system executing a full MON-Collect run. Dashed arrows represent communication with elements not represented in the figure (either protocols or other nodes), while blue arrows represent communication between different nodes and red arrows represent communication in the same node by different protocols.
-\todo[inline]{I cannot put the full execution figure before the rule engine. Please help.}
 
 \begin{figure}[h]
     \centering
@@ -314,7 +312,6 @@ Rules are evaluated by the order of their registration, following a \gls{fifo} o
 	\caption{Example of a rule.}
 	\label{fig:rule_input_and_output}
 \end{figure}
-\todo[inline]{Improve Figure~\ref{fig:rule_input_and_output}.}
 
 \subsection{Rule Engine}
 After the rules designed by the developer are implemented, there must be a component that evaluates them all and disseminates their outcome to the appropriate protocols. This is the task of the Rule Engine. In order for rules to be evaluated, the developer must first register them. At the start of execution, the Rule Engine will then, one by one, register them. It is also possible to register and unregister rules upon request, meaning that, a developer can control which rules are actively being evaluated during execution of the system. Upon completion of the metrics collection process, the Overlord Manager forwards the collected information to the Rule Engine, which then evaluates each registered rule.
