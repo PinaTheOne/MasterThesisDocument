@@ -1,0 +1,85 @@
+%!TEX root = ../template.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% chapter1.tex
+%% NOVA thesis document file
+%%
+%% Chapter with introduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\typeout{NT FILE chapter1.tex}%
+
+\chapter{Introduction}
+\label{cha:introduction}
+
+\prependtographicspath{{Chapters/Figures/Covers/}}
+
+% epigraph configuration
+\epigraphfontsize{\small\itshape}
+\setlength\epigraphwidth{12.5cm}
+\setlength\epigraphrule{0pt}
+
+This chapter discusses the motivation and goals of this work. First, we elaborate on the motivations and the problem our work aims to solve. Then we focus on the main objectives and the contributions made. Finally, we provide a brief explanation of the remainder of the document's structure.
+
+\section*{Motivation}
+\label{sec:motivation}
+
+In today's age, most services and applications on the internet are supported by cloud infrastructures such as Google, Amazon and Microsoft\cite{Taaffe2021}, which host a variety of services for developers to host their applications, and also serve users directly. This paradigm is highly centralized  and sits on the premise that one trusts and relies on these services and companies, while they dictate the terms of service with little competition. \textbf{Web3} emerged to address these issues, focussing on a user-centric Internet with a more democratic and cooperative view of the Internet, moving power away from big companies by design\todo{Was this it? }. Web3, ultimately aims to promote decentralization, security, and privacy. Web3 is still in its early stages and has not yet become competitive, but has revived the appeal for research in decentralized systems \cite{Costa2023}. Examples of this resurgence are the success of the blockchain in the world of cryptocurrencies\cite{Nofer2017}, as well as of the \gls{ipfs} for decentralized file sharing\cite{IPFS2015}.\todo{Tor works by sending traffic through 3 different servers. Don't think it fits here right?}
+
+%Blockchain is, as its name implies, a chain where each block contains a cryptographic hash of the previous block . Storing the hash in the next block prevents any kind of tampering. Blockchain technology leveraged peer-to-peer networks and consensus models to provide infrastructure for decentralized systems \cite{Cai2018}. This was the main catalyst for the resurgence of decentralized systems.
+
+Decentralized systems introduce an additional complexity layer, as cooperation usually relies on more complex solutions and protocols in order to achieve a true decentralized system\cite{Pourebrahimi2005}. As a consequence, many protocols\cite{Leitao2010a, Leitao2007a,Rowstron2001a,Kademlia2002}\todo{I did not know if you wanted me to cite examples of protocols with static configs or simply a paper that says that most have static configs.} have been studied and developed. The amount of protocols developed is also related to the different benefits they can offer, as due to complexity of such systems, developers may need opt for different approaches which might provide different guarantees. Moreover, protocols like these usually have local parameters which can be adjusted depending on certain conditions of the system. However, most protocols assume a static configuration, i.e. parameters of these protocols are entered at the start of the system, based on expectations of how the system will perform throughout its lifespan.
+
+Closely related to the peer-to-peer idea, swarm computing is a paradigm inspired by swarm intelligence, in which members of a system cooperate and coordinate to achieve self-organization, leading to a global behavior denominated as swarm behavior \cite{Kaur2020}. Swarm computing refers to computer systems that follow this paradigm. At its core, swarm systems rely on cooperation between system participants, therefore, communication and membership protocols are essential to achieve this cooperation\todo{This better? Or should I just remove this statement? I feel like swarm computing is only a motivation for TaRDIS, not for my solution. However, maybe I should just move this to the research context part}.
+
+In response to growing demands and growing complexity in these kinds of systems, IBM's autonomic manifesto was proposed to grant systems the ability of self-configuration with less intervention from a user\cite{Horn2001}. This is a very important concept that should play a part in the resurgence of decentralized systems, since it allows systems to manage themselves according to environment conditions, reducing or even eliminating the need for constant human intervention.\todo[inline]{More Citations in this part of autonomic?}
+
+Moreover, current solutions of autonomic computing are either fully centralized\cite{Hiltunen1999, Garlan2004}, in the sense that they do not consider distributed systems at all, or are highly decentralized\cite{Quin2021}, meaning that components of a system either manage themselves independently or have to coordinate for executing changes. Coordination of nodes usually imply resort to complex solutions, that can limit the type or architectures developed.\todo{Ask more or less what I should say here}
+%
+%
+%
+\section*{Problem Statement}
+\label{sec:problem_statement}
+
+Centralized approaches to autonomic systems, in this context, are usually not scalable solutions\cite{Hiltunen1999, Garlan2004, Rosa2007}, as they are not conceived with decentralized systems in consideration. Decentralized approaches, involve each component managing itself or communicating with the remaining components for deciding and executing changes\cite{Quin2021, Weyns2012}. These solutions are usually very complex and also very network intensive, since they resort to complex protocols and solutions, which share these issues. For example, reconfigurations such as changing the stack of protocols usually requires the components involved having to reach a \textit{quiescent} state\cite{Rosa2012}. However, less complex reconfiguration actions, such as changing local protocol parameters, might be possible with different and less complex solutions. Supporting more complex reconfigurations limits the design of less complex ones, since for a system to support both, the same general architecture is used. If we consider only adaptation of protocol parameters, the need for complex solutions is no longer a concern, leading to new ways of achieving system reconfiguration. This presents us with a promising research direction, in large-scale decentralized systems, which have their protocol parameters managed by a centralized component\todo{Didn't understand if the issue is the word centralized.}.\todo{Review this}
+
+\subsection*{Research Context}
+\label{sec_research_context}
+
+The Babel-Swarm Java framework \cite{Fouto2022} is a framework that assists developers with creation of distributed protocols, allowing them to focus entirely on the logic of their solutions, by abstracting error-prone and repetitive low-level tasks associated with creation of these systems.
+
+Babel currently features a vast library with several implementations of said protocols, for example \cite{Leitao2007a, Leitao2010a}. Moreover, Babel also has support for reconfiguration of local protocol parameters. However, it contains no mechanism for automation of this process, making it entirely the responsibility of the developer to manually create and request reconfiguration of these protocol parameters, and also specifying how they should be reconfigured.
+
+Moreover, this work was also developed in the context of the \textbf{TaRDIS} (Trustworthy and Resilient Decentralized Intelligence for Edge Systems) European project.
+
+"The project TaRDIS focuses on supporting the correct and efficient development of
+applications for swarms and decentralized distributed systems, by combining a novel
+programming paradigm with a toolbox for supporting the development and executing of
+applications" \cite{TARDIS2023}.\todo{Maybe I should move this somewhere else.}
+
+
+\section*{Objectives}
+\label{sec:objectives}
+With this work, we explore the potential of a system in which a central component manages a large-scale decentralized system. Our solution is composed of a central component that collects information about the system's overall performance, makes a decision on whether any of the protocols require reconfiguration, and if so which reconfigurations, and disseminates this decision to all participants of the system. This entire process must be carried out without sacrificing system performance, and will also have to consider scalability of the system\todo{Should I just not talk about scalability?}.
+
+Moreover, our solution was implemented using the Babel-Swarm Java framework\cite{Fouto2022}. As Babel has no self-adaptation mechanisms, we extended Babel with an adaptive framework implemented using this architecture, enabling developers to create solutions capable of self-reconfiguration without constant tampering by a human user.
+
+Additionally, we evaluate the solution using an application case study. This consists of developing a distributed application, and having our centralized component manage the distributed protocol used in this application, aiming to improve its performance. We then evaluate the developed system under different environment conditions, and report how our solution adapts. Moreover, we also test the same application without the developed component, and compare their performance.
+
+\section*{Contributions}
+\label{sec:contributions}
+
+This dissertation contributes with a new approach of development of self-adaptive decentralized systems, proposing a new architecture, where a centralized component oversees system monitoring and adaptation (with cooperation from each node on monitoring). It also contributes with an implementation of this architecture on top of the Babel-Swarm Framework, as well as complete evaluation of the solution with a case study, testing the adaptive solution against static protocol parameters. Moreover, we also contribute with a paper that is to be submitted to the next 45th International Symposium on Reliable Distributed Systems (SRDS 2026).\todo{Since we haven't yet finished the paper, can I mention it?}
+
+\section*{Document Structure}
+\label{sec:document_structure}
+
+This document is structured as follows:
+
+\paragraph{Chapter~\ref{cha:introduction}} In this chapter we explain the main motivation for this research, as well as the problem it aims to solve. Moreover, we describe the main objectives and contributions of this dissertation, as well as its research context.
+
+\paragraph{Chapter~\ref{cha:relatedwork}} This chapter presents three main areas that are core to this thesis. First we discuss decentralized systems, which touch on subjects such as peer-to-peer systems, communication protocols and relevant distributed protocols developed, and how they could benefit from a solution such as ours. Secondly, we explore the concept of autonomic computing, while discussing the different components such as system monitoring, planning, and execution. Finally, we introduce relevant frameworks that are either a useful foundation to build upon, or have themselves made contributions to the world of autonomic computing.
+
+\paragraph{Chapter~\ref{cha:overlord}} This chapter details the designed solution, mainly its components and how they interact to achieve the desired behavior. First we give a general overview of its architecture. Then we discuss monitoring of the system. Moreover, we detail how Overlord adapts parameters of protocols based on the monitored information of the system. Finally, we present how Overlord orchestrates such components to present us with a solution that works harmoniously to achieve its main objectives.
+
+\paragraph{Chapter~\ref{cha:evaluation}} In this chapter, we evaluate the proposed solution and its ability to improve performance of the overall system, through means of a case study. We describe the evaluation test-bed and evaluate its performance under specific environment conditions against alternatives without our solution.
+\paragraph{Chapter~\ref{cha:conclusion}} Finally, this chapter presents the final conclusions on the developed solution, delving into its contributions, and also clarifying its limitations, while also proposing possible future work.\todo{Review this.}

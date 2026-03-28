@@ -1,0 +1,479 @@
+%!TEX root = ../template.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% chapter1.tex
+%% NOVA thesis document file
+%%
+%% Chapter with introduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\typeout{NT FILE chapter2.tex}%
+
+\chapter{Related Work}
+\label{cha:relatedwork}
+
+\prependtographicspath{{Chapters/Figures/chapter2}}
+
+% epigraph configuration
+\epigraphfontsize{\small\itshape}
+\setlength\epigraphwidth{12.5cm}
+\setlength\epigraphrule{0pt}
+
+\par In this chapter, we will examine the work conducted in this field and highlight the most relevant contributions. In Section~\ref{sec:decentralized_systems}, we will examine the key concepts of distributed and decentralized systems. Section~\ref{sec:autonomiccomputing} will analyze the concept of autonomic computing, including the many components required for a system to manage itself. Finally, in Section~\ref{sec:frameworks}, we will review relevant frameworks by discussing their contributions and identifying areas of improvement in light of this thesis's promises, as well as explaining the Babel framework and why it was chosen instead of other options.
+%--------------------------------------------------------------------------------------
+%  ____                      _             _ _             _ 
+% |  _ \  ___  ___ ___ _ __ | |_ _ __ __ _| (_)_______  __| |
+% | | | |/ _ \/ __/ _ \ '_ \| __| '__/ _` | | |_  / _ \/ _` |
+% | |_| |  __/ (_|  __/ | | | |_| | | (_| | | |/ /  __/ (_| |
+% |____/ \___|\___\___|_| |_|\__|_|  \__,_|_|_/___\___|\__,_|
+%                                                            
+%  ____            _                                         
+% / ___| _   _ ___| |_ ___ _ __ ___  ___                     
+% \___ \| | | / __| __/ _ \ '_ ` _ \/ __|                    
+%  ___) | |_| \__ \ ||  __/ | | | | \__ \                    
+% |____/ \__, |___/\__\___|_| |_| |_|___/                    
+%        |___/                                               
+%--------------------------------------------------------------------------------------
+\section{Decentralized Systems}
+\label{sec:decentralized_systems}
+\par In a decentralized system,  workloads and responsibilities are distributed among participants of the system. Instead of relying on central points that provide a specific service, all users have to cooperate to serve other users and be served by other users. This approach ensures a balanced workload and also ensures fault tolerance. To understand the concept of decentralized systems, it is essential to understand the principles of peer-to-peer systems and its associated concepts.
+%--------------------------------------------------------------------------------------
+\subsection{Peer-To-Peer Systems}
+\label{ssec:p2p_systems}
+\par A \gls{p2p} system (can also be called a \gls{p2p} network) consists of nodes that can directly communicate and interact with each other, making them capable of sharing information and services without the relying on centralized servers. A very important feature that defines these systems is the fact that a node serves as both a resource or service provider, and a requester \cite{Schollmeier2002}. This models human interaction--whenever we need something, we ask our friends or relatives, and if they can't help, they might connect us with their peers, which in turn might be able to help us \cite{Vu2010}. \gls{p2p} systems have several characteristics that distinguish them from more traditional approaches to distributed systems, such as:
+\begin{enumerate}
+\item \textbf{Symmetric role:} As mentioned before, a node has the role of both server and client;
+\item \textbf{Scalability:} \Gls{p2p} systems can scale to have thousands of nodes, harnessing the power of many computers instead of just one computer;
+\item \textbf{Heterogeneity:} \Gls{p2p} systems do not impose any hardware capacity restrictions, i.e. a node can be very hardware limited and another can be very hardware capable.
+\item \textbf{Distributed Control} In its most pure form, \gls{p2p} requires load and responsibility distribution among nodes, resulting in a fully decentralized solution, where any random node could be removed, and the system would still be able to perform \cite{Schollmeier2002}.
+\item \textbf{Dynamism:} In a \gls{p2p} system, nodes may leave and join the system at any time, meaning that its topology will constantly be dynamic.
+\end{enumerate}
+%
+%
+%
+\paragraph{\Gls{p2p} Taxonomy} Even though a clear definition of \gls{p2p} systems was given in the previous paragraph, the actual classification of a \gls{p2p} system can vary. At the surface level, a \gls{p2p} system can be decentralized or hybrid, where hybrid \gls{p2p} systems can be closer to a traditional centralized architecture.
+%
+%
+%
+\subsubsection{Pure Decentralized P2P Systems}
+\label{sssec:pure_decentralized_p2p_systems}
+\par A pure \gls{p2p} system has absolutely no centralized point, i.e. all nodes must have equivalent functionality. This means that there are no centralized nodes or super-nodes (nodes that act
+as a centralized server to a subset of clients \cite{Yang2003}) \cite{Pourebrahimi2005}. Without a central point of failure, upon failure of a node, another one can simply take over. However, this decentralized nature often results in slower location of resources and can introduce challenges such as unpredictability of the system.
+%
+%
+%
+\subsubsection{Hybrid P2P Systems}
+\label{sssec:hybrid_p2p_systems}
+\par Hybrid \gls{p2p} Systems combine strengths of both centralized and pure \gls{p2p} architectures. These systems feature a central server, but do not remove the feature of peer cooperation. Hybrid systems can be categorized in two main types \cite{Pourebrahimi2005}:
+\paragraph{Centralized} The system contains a central server that provides some service to others, or has more responsibility than other nodes, and peers maintain a connection to this central server. This approach sacrifices some benefits of pure \gls{p2p} systems, such as being more vulnerable to attacks and having a single point of failure, but can also provide better coordination among nodes, and optimized routing (discussed further in Section~\ref{ssec:resource_location}).
+\paragraph{Decentralized} Instead of centralization in one node, some nodes of the system have a more important role. These are called "super-nodes" and act as a centralized server to peers. Like the centralized approach, they can offer benefits such as optimized routing and coordination, but removing the single point of failure. If a super-node fails, peers can contact another super-node, or, in case they all fail, ordinary peers can assume the role of super-peers.
+\par Overall, the kind of system we are proposing, in its normal functionality will ideally be a pure \gls{p2p} system, with its autonomic component as a hybrid system. In terms of the hybrid approach, we will either have a central server that coordinates adaptation of all nodes, or have a selection of super-nodes that are coordinated by the \textit{Overlord} component. These approaches are further explored in Chapter~\ref{cha:workplan}, under Section~\ref{sec:proposed_solution}. %\todo{Mudei esta parte para não falar de partilha de ficheiros e falar de tudo no geral e falar só das approaches em geral}
+%
+%
+%-------------------------------------------------------------------------------------
+\subsection{Membership}
+\label{ssec:membership}
+\par Before exploring the concept of overlay networks, an important concept is membership. This is a core aspect of a \gls{p2p} network. Most systems assume global membership (i.e. every node knows all nodes in the system), but in decentralized systems, especially large-scale systems, this is not the case. In large systems, the topology is always being changed, with nodes joining and leaving the system, and keeping this information updated for all nodes is not a viable option. For this, protocols rely on \textit{partial views}, which are sets of (contact information for) subsets of nodes (typically logarithmic \cite{Leitao2010}) in the system \cite{Leitao2007}. Typically, a node only needs to know a logarithmic amount of nodes for message routing to be done with $O(\log(n))$ complexity, %\todo{"antes estava 1\% of nodes". Mudei para isto}
+where $n$ is the number of peers in the system \cite{Rowstron2001}
+%--------------------------------------------------------------------------------------
+\subsection{Overlay Networks}
+\label{ssec:overlay_networks}
+\par An overlay network is a network built on top of an existing network (referred to as the underlay network). The overlay relies on it for basic network communication like routing and forwarding. Nowadays, most overlay networks are built on top of the TCP/IP protocol \cite{Tarkoma2010}. The nodes of an overlay network have logical connections that can span many physical connections. This concept is the foundation for \gls{p2p} systems (and for decentralized systems as a consequence). A \gls{p2p} system is an overlay network that establishes a (logical) connection between its peers. Overlay networks are usually divided in two categories:
+%
+%
+%
+\subsubsection{Unstructured Overlay Networks}
+\label{sssec:unstructured_overlay_networks}
+\par Unstructured overlay networks are also known as random overlay networks, and this is due to their topology. Each node has a selection of random neighbors. It is important to note that, even though not all peers are directly connected, communication between them is still possible through gossip-based protocols (discussed further in Section~\ref{ssec:gossip_protocols}). One thing to consider is the number of neighbors each peer has. Every peer will have a subset of nodes as their neighbor set, which are usually called a \textit{partial view} (as mentioned in Section~\ref{ssec:membership}). Defining the number of neighbors of each node is a topic that matters most to the protocol being used, and will be discussed in Section~\ref{ssec:gossip_protocols}. Overall, unstructured overlay networks are very fitting for systems where nodes are joining and leaving at a high rate. However, this comes at a cost since, due to not having any structure, routing can be very challenging \cite{EngKeongLua2005}.
+%
+%
+%
+\subsubsection{Structured Overlay Networks}
+\label{sssec:structured_overlay_networks}
+\par Structured Overlay Networks are usually based on the concept of consistent hashing (a technique used to deterministically distribute keys across nodes based on their unique identifier)%\todo{Expliquei melhor o consistent hashing}
+, which is fundamental to \glspl{dht}. \glspl{dht} are useful because they allow nodes to find data efficiently, as opposed to having to search all nodes for it, for instance, if a node is looking for a specific resource, they can calculate its hash and know its location (further discussed in Section~\ref{ssec:resource_location}). Some notable examples of \gls{dht} protocols are Chord \cite{Chord2003} and Kademlia \cite{Kademlia2002} "a peer-to-peer distributed hash table with provable consistency and performance in a fault-prone environment". Additionally, \glspl{dht} can offer this while maintaining little information on the nodes of the system. However, when a node detects a failure by one of its peers, it cannot simply replace it for another random peer, meaning it has to resort to a structured way of finding a suitable replacement \cite{Leitao2010}. It is also important to note that, a resource can also be a specific peer, instead of data.
+%-------------------------------------------------------------------------------------
+\subsection{Gossip Protocols}
+\label{ssec:gossip_protocols}
+\par After establishing a \gls{p2p} network, we must then establish a way for peers to communicate.
+\par Gossip protocols are a viable way for nodes of a distributed system to communicate, taking advantage of the cooperation that \gls{p2p} provides. The general idea of gossip consists of, when a node disseminates a message (to another node or a group of nodes), instead of directly transmitting the message individually to every node, it will send it to its direct neighbors, and their neighbors will send it to their neighbors, until all the intended recipients receive the message. A good way to reason about gossiping protocols, is that messages spread like a contagious disease in epidemic situations \cite{Bakhshi2007}. Interestingly, we can also infer the number of neighbors (to which a node has to send a message) necessary for the message to spread from the theory of epidemics \cite{Eugster}. This value is ideally logarithmic in relation to the number of nodes in the system \cite{Leitao2010}. %\todo{Tirei a citação da tese do professor. Citação original aparentemente está em "Bimodal Multicast, a reliable multicast protocol introduced by Ken Birman"}.
+This parameter is referred to as \textit{fanout}. High values of \textit{fanout} leads to more redundancy, but overall more reliability, as the probability of every node receiving the message gets closer to 1. Lower values of \textit{fanout} reduce redundancy, but also reduce reliability, as not every node may get the message. One variant of this protocol is \textit{flood}, in which a peer sends the message to \textbf{all} of its neighbors. Another approach is using a \textit{hop-count}, where a message carries a variable, and each time its transmitted, its \textit{hop-count} increases. When the \textit{hop-count} reaches a certain value, peers stop transmitting it along the network. This reduces redundancy, but this also reduces reliability, as not everyone may get the message.
+\par One common use for gossip protocols is to broadcast a message to every peer in the network. Assume that a node wants to send a message to every peer. The most direct approach, is for that node to send the message directly to each node. However, this is unbalanced, as one single node is responsible for dissemination of the message to everyone, while the other nodes just have to receive it. A much more reasonable approach, would be for other nodes to cooperate and help deliver the message to their neighbors as it is passed through the network (as a gossip approach suggests).
+\par Figure~\ref{fig:gossip} provides a general illustration of how a gossip protocol works, in which each node, when it receives the message, chooses two random nodes to send the message. Now we discuss the three main approaches to gossip \cite{Leitao2010}:
+\begin{figure}
+	\centering
+	\includegraphics{gossip.pdf}
+	\caption{General Gossip-Based Communication Between Nodes}
+	\label{fig:gossip}
+\end{figure}
+\paragraph{Eager Push Gossip} Consists of the most basic model. When a peer receives a message, it transmits it to a random selection of its neighbors (can be all of them). This approach is initiated by the sender. This is the variant represented in Figure~\ref{fig:gossip}
+\paragraph{Pull Gossip} This approach consists of nodes informing their peers of the data they have periodically (e.g. sending the hash of the data). When a node receives a hash they do not yet have, they can request it directly from peers. This is a good option if messages are big, because messages are sent only if they are needed. However, for each message we have two interactions (\textit{request} + \textit{message}), so if messages are small, we might be putting the network under more stress.
+\paragraph{Lazy Pull Gossip} In essence, when a peer receives a message, it sends to a random selection of peers its identifier (e.g. a hash). If those peers do not have the message, they can request it. This approach removes necessity for periodically checking in with each peer, but makes it so that each message needs three interactions (\textit{message ID} + \textit{message request} + \textit{message}).
+\par Overall, the choice of which approach to use comes down to a trade-off between redundancy and latency. The eager push approach produces more redundant traffic, and the two other approaches produce more network traffic but less redundancy.
+%--------------------------------------------------------------------------------------
+\subsection{Resource Location}
+\label{ssec:resource_location}
+\par Resource location is a very relevant aspect of \gls{p2p} systems. It consists of allowing peers to find the owners of a desired resource within the network. If a node wants to find a resource, there are two ways of doing so. It either knows exactly what resource it is looking for (i.e. \textit{exact match} variant of resource location), or it only knows properties of that resource, and in that case, the peer will have to execute a query with the properties of the resource its looking for.
+\par This service became popular with the appearance of Napster \cite{Napster}, and after Napster, a few others have shown up, like Gnutella \cite{Bordignon2001}, PAST \cite{Druschel2001} and KaZaA \cite{Good2003}. %\todo{adicionar citações}
+Now we look at the different types of architectures implemented by these services \cite{Leitao2010}:
+\paragraph{Centralized} Consists of having a centralized server or group of servers containing an index of the resources available and their location. When a peer wishes to locate a resource, it sends the query directly to the central server, which responds with the location of the file. The node then contacts the peer that has the file, so they can share it, maintaining the \gls{p2p} aspect. Having a centralized server is good as it simplifies the design of the system. However, the system has a single point of failure, which is undesirable.
+\paragraph{Distributed Over DHT} In this approach, nodes use a \gls{dht} in order to locate resources. Each peer registers its resources in the \gls{dht} using its unique identifier. When a peer wishes to locate a resource, it searches for that unique identifier in order to know which peer has it. It is important to note that this architecture is only possible if peers know the exact resource they are searching for, so queries based on properties of a resource are not possible.
+\paragraph{Distributed Over Unstructured Overlay Network} This is an alternative that makes use of unstructured overlay networks. Each peer will maintain an index of the files it has. When a node wishes to locate a resource, it will disseminate a request to the network (e.g. using a gossip broadcast protocol). The peer that has the resource, when it receives this request, will send it to the peer who requested it. In systems where nodes execute a lot of queries this can become a problem, as the network will constantly be filled with a lot of queries being passed around from node to node.
+%--------------------------------------------------------------------------------------
+\subsection{Replication Mechanisms}
+\label{ssec:replication_mechanisms}
+\par Data replication, consists of a fault-tolerance mechanism based on the idea of having redundancy of information stored in different machines. In case one of them fails, another can simply be used, and the system keeps working as intended. If a system is reliant on a specific piece of data which is stored in one machine, if it fails, the availability of the system will be compromised. Since that piece of data is only located in one machine, we have a single point of failure, which is undesirable. Replication enables distribution of data along many locations, and if one of them fails, others can simply take over, ensuring availability and fault-tolerance. 
+%\todo{Adicionei esta frase, está boa?}
+It might also be useful in reducing communication overhead, and can improve the scalability of the system \cite{Martins2006}. This might be of relevance to our work in the sense that it provides a way to increase the availability of data required by a reconfiguration manager to operate correctly. But there are many factors that must be considered when replicating data across multiple systems.
+%
+%
+%
+\paragraph{Single-Master vs. Multi-Master Replication}
+\label{par:single_master_vs_multi_master}
+This aspect concerns the way replicas interact, and which replicas are effectively executing writes and reads, and which only receive the updates from other replicas. \par In \textbf{Single-Master} replication, any replica can be contacted, but only one replica can effectively write. When it writes, it propagates the effects of that write to other replicas. This approach has no limitations concerning the order of operations and consistency of the data. On the other hand, it brings problems related to scalability and availability due to only having one replica executing writes. All clients that need to execute a write operation, must contact that one replica, which can become a significant bottleneck if the system has too many write requests at the same time.
+\par With \textbf{Multi-Master}, any replica can write, and is tasked with the responsibility of having to propagate the effects of writes to other replicas. This approach removes the bottleneck by allowing multiple replicas to execute writes providing a better load balance throughout the system. This can create some concerns with respect to the order of operations, so solutions are usually quite complex and expensive in terms of communication.
+\par Figure~\ref{fig:single_vs_multi_master} illustrates the difference between these approaches. In (a), only one replica writes, while others can only read. In (b), any replica can either read or write.
+\begin{figure}
+	\centering
+	\begin{subfigure}{.5\textwidth}
+	  \centering
+	  \includegraphics[scale=.75]{singlemaster.pdf}
+	  \caption{Single-Master Replication}
+	  \label{fig:single_master}
+	\end{subfigure}%
+	\vrule
+	\begin{subfigure}{.5\textwidth}
+	  \centering
+	  \includegraphics[scale=.75]{multimaster.pdf}
+	  \caption{Multi-Master Replication}
+	  \label{fig:multi_master}
+	\end{subfigure}
+	\caption{Single-Master vs. Multi-Master Replication.}
+	\label{fig:single_vs_multi_master}
+\end{figure}
+%
+%
+%
+\paragraph{Full vs. Partial Replication}
+\label{par:full_vs_partial_replication} This factor concerns the location of data among replicas.
+\par With a \textbf{Full Replication} approach, all replicas contain a copy of all data in the system. This approach provides good load balancing since all replicas have to store updates, and also provides maximal availability as, in case all replicas fail, the remaining one will still be able to provide all data.
+\par In a \textbf{Partial Replication} approach, all systems contain a copy of a subset of the data. This means that the data in one replica can be different from the data in other replicas. This approach limits load balancing, due to the fact that not all replicas will be able to execute operations, so if one object is accessed frequently, load will be unbalanced. It may also cause unavailability if all replicas that have a copy of an object fail.
+%
+%
+%
+\paragraph{Synchronous vs Asynchronous Replication}
+\label{par:synchronous_vs_asynchronous_replication}
+\par This aspect concerns the point in which an operation is completed, i.e. when the replica (that the request was made to) responds to the client.
+\par In a \textbf{Synchronous Replication} system, a replica only responds to the client when all or a certain subset of replicas have stored the update. This means that, a replica will first send the update to all other replicas, and only when it receives enough acknowledgments, will it respond to the client. This provides consistency, since a replica will only respond when it is certain that the update is actually stored in the system. However, it also introduces more latency, due to the client having to wait for the replica to receive acknowledgments from others.
+\par With \textbf{Asynchronous Replication}, the replica that received the request, responds to the client when it has stored the update, and only then will it propagate the update to the other replicas. The client will have a much faster response time, but might experience inconsistencies. If a replica sends the response to the client and immediately fails before sending the update to other replicas, the operation will be lost.
+
+\par In summary, replication and an appropriate choice of replication are a core aspect to a decentralized system. In terms of relation to our work, depending on the approach to the centralized component, it might be useful to replicate telemetry data (subject discussed further in Section~\ref{ssec:monitoring}) across other locations to provide availability. If the central node fails, the autonomic service would become unavailable. For another node to replace it, monitored data would either have to be collected from scratch, or already be replicated in the node that replaces the failed component.%\todo{Adicionei isto, está bom?}
+%
+%
+%
+%--------------------------------------------------------------------------------------
+\subsection{Case Studies of Decentralized Applications}
+\label{ssec:study_cases_of_decentralized_systems}
+\par For evaluation, we will use case study applications that employ protocols and concepts mentioned in the previous sections. These can be good candidates for applications of case studies, because in their essence, they all use these base concepts, which in turn help define decentralized systems (which is our main focus). In this section, we go over how these applications and protocols work and how they employ the concepts discussed in the last section. We will also refer relevant parameters that could be a good fit for adaptation.
+%\todo{Expliquei assim mais ou menos a relevância, está bom?}
+% "No início tens de explicar a relevância destas coisas para o nosso trabalho. also em cada um se calhar devias falar dos parametros que podiam ser automaticamente geridos pela nossa solução."
+%
+%
+%
+\subsubsection{Gnutella}
+\label{sssec:gnutella}
+\par Gnutella \cite{Bordignon2001} is a file-sharing protocol used for data storage and searching in \gls{p2p} distributed systems. In Gnutella, all gnodes (nodes of Gnutella) can share and receive files. Its topology does not enforce any type of hierarchy, meaning Gnutella is a real example of a pure \gls{p2p} system, due to all nodes having the same functionality and responsibility. Gnutella also uses a gossip-based protocol for the communication between nodes, which means that a node that enters the network, only needs one address (known as a contact) in order to be connected to it.
+\par Gnutella has 5 functions, which are:
+\paragraph{Ping Function} Used by nodes to announce their presence in the network.
+\paragraph{Pong Function} A sort of acknowledge to the Ping function. This function also carries the neighbors of that node. This is to account for the following scenario: Assume we have 2 nodes \textit{node-1} and \textit{node-2}. If a \textit{node-3} joins connecting to \textit{node-2}, and \textit{node-2} crashes, \textit{node-3} will be disconnected from the network. If \textit{node-2} sends its neighbors to \textit{node-3} and then fails, \textit{node-3} will still be able to participate in the network because it has access to \textit{node-2}'s neighbors, i.e. in this case \textit{node-1}.
+\paragraph{Query Function} Used by nodes that want to find a certain file. Nodes send a query for the file wanted to their neighbors, and the neighbors are responsible for sending that query to their neighbors until all nodes in the network have received the query.
+\paragraph{Query Hit Function} Consists of a response to the query. In this message, the node identifier is also included in case the receiving node cannot download the file directly from an IP, and has to resort to a push function.
+\paragraph{Push Function} This function is used by nodes that want a certain file, and cannot download it directly from the IP. Nodes will send a message to a peer that has that file.
+\par Moreover, some relevant parameters that could be worth exploring in terms of adaptation could be the \textit{simultaneous connections} which represents the number of simultaneous connections each peer tries to maintain and the \textit{time-to-live} of a message (which works as the \textit{hop-count} mentioned in Section~\ref{ssec:gossip_protocols}).%\todo{Adicionei estes parametros}
+\par Overall, Gnutella used a flooding approach, and so this led to a lot of network traffic and redundancy, which eventually killed its usage, but the protocol was studied to improve its efficiency and functionality. However, its approach could be a good candidate for academic evaluation purposes. %\todo{Isto é suficiente para relacionar com o nosso trabalho?}
+%
+%
+%
+\subsubsection{Freenet}
+\label{sssec:freenet}
+\par Freenet \cite{Clarke2001} is an adaptive \gls{p2p} system that allows for publication, replication and retrieval of data, while also providing anonymity. Files are mentioned without referring its location, and a file can be replicated in many locations.
+\par Each node knows their upstream and downstream neighbors to provide privacy. A request, when its sent, contains a \textit{hop-count} like mentioned in Section~\ref{ssec:gossip_protocols} to help prevent infinite chains, and also contains an identifier, so nodes can know if they are seeing a duplicate.
+\par In order to obtain a file, a node must first calculate or obtain the key of the file. It then sends a request with that same key, an identifier and a \textit{hops-to-live} value to itself. When a node receives a request, it will check its own data to look for the file and if its found, it will send the file back down the stream until it reaches the requestor. If it does not find the file, it will search for the nearest key in its table and forward the request to that node. When this node eventually receives the file requested, it will pass it down the stream until it reaches the nodes that requested it in the first place. A possible target of an adaptive solution could be the \textit{hops-to-live} parameter, which could be dynamically adapted depending on the system's topology.%\todo{Adicionei a menção do parametro do hops-to-live}
+\par In general, the protocol does provide the decentralized approach, being another example of a pure \gls{p2p} system due to all nodes having the same responsibility. This makes it a candidate approach for a case study, as it is a system fitting the decentralized approach we aim for. %\todo{Isto é suficiente para explicar a relação com o nosso trabalho?}
+An aspect that might be considered, is the fact that once a file is found, it could be directly transmitted to the requestor, but is instead passed down the stream. Essentially this is to preserve privacy, meaning it comes down to a trade-off between efficiency and privacy.
+%
+%
+%
+\subsubsection{Content Addressable Network - CAN}
+\label{sssec:can}
+\par \gls{can} \cite{Ratnasamy2001} is a distributed infrastructure that provides the functionality of hash-tables (where content is mapped by a hash of its key) but through a decentralized system.
+\par \gls{can} was designed to be a more scalable alternative to Napster and Gnutella. Napster, has the index of its files in a single central server, meaning there is a single point of failure. Gnutella, on the other hand, does not centralize the index of its files, but floods the entire network, which makes it not scalable. \gls{can} proposes a solution to these challenges, in order to have a pure scalable \gls{p2p} system.
+\par The process of file transferring between peers is inherently scalable, so the authors affirm that the issue is locating the file (Section~\ref{ssec:resource_location}). \gls{can} proposes that nodes are logically organized in a dimensional space. Nodes dynamically organize themselves into a structured overlay network that represents a virtual coordinate space. Each node is responsible for a specific region of this space.
+\par To communicate effectively, each node maintains a record of the IP addresses of its neighboring nodes that oversee adjacent coordinate zones. This group of direct neighbors acts as a routing table, enabling the system to relay messages between any two locations in the network through the virtual coordinate system.
+\par \gls{can} has several parameters that could be a target of adaptation, some of which are \textit{dimensions: d} which is the number of dimensions in the coordinate space, \textit{realities: r} which refers to a replication factor, and parameter \textit{p} which is the number of peers per zone. Different values of these parameters can provide different effects on the system, mainly affecting path length, latency and routing fault tolerance.%\todo{Falei aqui destes parametros e possiveis efeitos}
+\par In general, \gls{can} manages to suggest an approach to a scalable pure \gls{p2p} solution (unlike other previously mentioned solutions). This is a good aspect to be considered since, one of our main focus points is scalability of the system, and other approaches might introduce restrictions concerning this aspect. %\todo{adicionei esta frase para estabelecer a ligação com o nosso trabalho.}
+%
+%
+%
+\subsubsection{Pastry}
+\label{sssec:pastry}
+\par Pastry \cite{Rowstron2001} is another alternative that addresses the resource location problem. It provides routing at the application level and resource location in a \gls{p2p} system. When a node receives a message, and a key, it re-routes the message to the node that has an identifier closest to the key. Like the other examples, Pastry is a completely decentralized and scalable solution. Assuming we have $N$ nodes, pastry can route to numerically the closest node to a key in $\log N$ steps.
+\par Pastry has some parameters that may be relevant candidates for adaptation, which are: \textit{b} the number of bits of entries in the routing table, $L$ which is the set of the numerically closest nodes, and $M$ which is the set of the physically closest nodes.%\todo{Adicionei info sobre os parâmetros. Não estou muito convencido} 
+\par Pastry does provide what it promises, and has been used by many as a building block. One of these was PAST \cite{Druschel2001}, which will be discussed in the next section. Pastry provides efficient routing in a decentralized manner, being a good solution to the resource location problem, and a good fit for a decentralized application.%\todo{Relationship with our work???}
+%
+%
+%
+\subsubsection{PAST}
+\label{sssec:past}
+\par As mentioned previously, PAST \cite{Druschel2001} was built on top of Pastry as a storage system providing scalability, high availability, persistence and security. PAST nodes form an overlay network capable of reorganizing itself. PAST also provides high availability by replicating files at multiple nodes. To ensure balance of storage, PAST has a quota system, in which users are assigned fixed quotas, or are allowed to use as much storage as they contribute. To provide privacy, users may use encryption.
+\par The aim of PAST is to combine the scalability and self-organization of systems like Freenet (Section~\ref{sssec:freenet}) with the reliability and persistence expected from storage systems.
+%
+%
+%
+%\subsubsection{KaZaA}
+%\label{sssec:kazaa}
+%
+%
+%
+\paragraph{Summary} In summary, decentralized systems are a great solution that provides not only decentralization, but also scalability, availability, and fault-tolerance. They can also introduce challenges relatively to coordination, overhead, and in general, preventing different nodes from thinking that the system is in different states is usually complex and challenging. %\todo{Tirei a palavra consistency, e preferi escrever por extenso a minha ideia}
+In general, to accomplish our solution, normal system behavior should be the closest to a pure \gls{p2p} system. The autonomic component of the system will be centralized, meaning it will be closer to a hybrid \gls{p2p} system. To provide scalability, messaging the centralized component should be done using a gossip-based protocol to relive the component from having to manage all nodes directly.
+%\todo{Explicar melhor o CAN (se possível)}
+%--------------------------------------------------------------------------------------
+%     _         _                              _      
+%    / \  _   _| |_ ___  _ __   ___  _ __ ___ (_) ___ 
+%   / _ \| | | | __/ _ \| '_ \ / _ \| '_ ` _ \| |/ __|
+%  / ___ \ |_| | || (_) | | | | (_) | | | | | | | (__ 
+% /_/   \_\__,_|\__\___/|_| |_|\___/|_| |_| |_|_|\___|
+%                                                     
+%   ____                            _   _             
+%  / ___|___  _ __ ___  _ __  _   _| |_(_)_ __   __ _ 
+% | |   / _ \| '_ ` _ \| '_ \| | | | __| | '_ \ / _` |
+% | |__| (_) | | | | | | |_) | |_| | |_| | | | | (_| |
+%  \____\___/|_| |_| |_| .__/ \__,_|\__|_|_| |_|\__, |
+%                      |_|                      |___/ 
+%--------------------------------------------------------------------------------------
+\section{Autonomic Computing}
+\label{sec:autonomiccomputing}
+\par Due to rapid advancements made on the field of computing, applications have not only become increasingly complex, but also heterogeneous and dynamic. Distributed systems did not help on this matter, since even the most simple distributed system can succumb to the problems of network communication. In 2001, IBM suggested the concept of autonomic computing \cite{Horn2001}. It emerges as a different paradigm for systems and application design, which seeks to strengthen computer systems while also reducing human involvement. IBM, along with this new paradigm, also formulated the four properties of an autonomic system, usually referred to as the \textbf{self-* properties} \cite{Huebscher2008}:
+\paragraph{Self-Configuration} Consists of the capability for a system to reconfigure itself according to high-level goals, i.e. through specifying an objective and not necessarily how to achieve it. 
+\paragraph{Self-Optimization} A system that is capable of optimizing the use of its resources under changes within itself or its environment.
+\paragraph{Self-Healing} A system that autonomously detects and determines issues within itself. Issues can go from hardware related problems to software errors \cite{Paulson2002}. It is necessary that, through the self-healing process, the system is not further harmed by, for example, new bugs introduced. Fault-tolerance is a crucial aspect.
+\paragraph{Self-Protecting} The ability of a system to protect itself from attacks. This means that the system should be able to provide security, privacy and integrity of data.
+\par As mentioned before, a self-adaptive system should be able to provide these four properties. However, the main properties this thesis will have its focus on are self-configuration and self-optimization (with less emphasis on the two other mentioned). 
+\par The autonomic computing paradigm is inspired by the human nervous system, the most sophisticated example of autonomic behavior existing in nature today. It possesses the ability of detecting issues within itself, and, as an unconscious reflex, respond with corrective actions. For instance, when a human is exposed to low temperatures, blood vessels constrict to minimize heat loss, or when the eye is exposed to light, its pupil contracts.
+\par The goal of the autonomic paradigm is to enable a system to analyze itself and, based on high level goals, respond to changes ensuring its continuous and correct operation \cite{Parashar2005}. In essence, the objective is to create a system that works similarly to a human nervous system, quickly reacting to anomalies within itself or adverse external conditions, and carrying out measures to counter them, bringing back the system to its normal and correct state.
+%
+%
+%
+\paragraph{Adaptation}
+\label{par:adaptation}
+Throughout this document, the term adaptation will be used quite frequently, so it is important to understand its meaning in this context. Adaptation refers to the action of changing a certain behavior of a system based on when a condition is met \cite{Rosa2012}. For example, suppose we have a system that needs to broadcast information from one node to all others. If communication is made through a gossip based approach, one might simply adapt to have a bigger or smaller \textit{fanout} depending on the number of nodes in the system. Or even change the wait time before a \textit{timeout} is triggered.
+%
+%
+%
+\subsection{MAPE-K}
+\label{ssec:mapek}
+\par MAPE-K, originally proposed by IBM, is a control loop (a loop that collects information on the system, acts upon it and feeds it back into the loop \cite{Seborg2017}) and a well-recognized engineering approach to achieve self-adaptive systems \cite{Arcaini2015}. It consists of four computational steps: \textit{Monitor}, \textit{Analyze}, \textit{Plan}, \textit{Execute} over a \textit{Knowledge} base, as illustrated in Figure~\ref{fig:mapek}.
+\begin{figure}
+	\centering
+	\includegraphics[scale=1.2]{mapek.pdf}
+	\caption{IBM's MAPE-K (Adapted from \cite{Huebscher2008})}
+	\label{fig:mapek}
+\end{figure}
+\par An autonomic element can be any type of computing resource such as an application server, storage device, database, among others \cite{Kephart2005}. The autonomic element consists of a \textit{managed element}, which represents a software or hardware resource that achieves autonomic behavior through integration with an \textit{autonomic manager}. \textit{Sensors} (also called \textit{probes}) are responsible for collecting information about the performance of the \textit{managed element} and its environment, that is considered relevant for making a decision. \textit{Effectors} implement modifications on the \textit{managed element}. The \textit{autonomic manager}, with the data collected by the \textit{sensors}, can \textit{monitor} the \textit{managed element} and \textit{execute} reconfiguration actions through the \textit{effectors} \cite{Huebscher2008}.
+\par A component $K$ (\textit{Knowledge}) keeps data about system (including its environment) and data concerning its adaptation goals. This data can come from human experts and/or gathered data from the \textit{sensors}.
+\par The component $M$ (\textit{Monitor}) gathers particular data from the execution environment, the system itself, and other needed information, storing it in the $K$ component. The component $A$ (\textit{Analyze}) is responsible for interpreting the collected data and detecting relevant changes from the expected behavior of the system. If a change is detected, this component is also responsible for triggering the $P$ (\textit{Plan}) component, which uses the provided information to orchestrate a workflow of reconfiguration (i.e. adaptation) actions necessary to achieve the system's goals. Finally, the $E$ (\textit{Execute}) component carries out these actions in order to bring the system back to a normal behavior.
+\par This separation into multiple components helps the designer focus on one activity at a time, and implement and modify each one of them as a separate module of a bigger system.
+\par As stated in \cite{Parashar2005}, 'Sensing'; 'Analyzing'; 'Planning'; 'Knowledge' and 'Execution' are keywords to identify an autonomic system, and although the MAPE-K model doesn't define the entire field of autonomic computing, the objectives of each of the components are the main areas of concern. This being said, each component has a subsection, in which the advancements made on the thematic will be detailed independently of MAPE-K.
+%
+%
+%
+\subsection{Monitoring}
+\label{ssec:monitoring}
+\par As stated in Section~\ref{ssec:mapek}, monitoring consists of gathering information about a system and its environment. The collected data should be useful in order to help the other components make a decision.
+\par For instance, assume we have a system composed of nodes that send messages to each other. Relevant information can include latency, packet loss, throughput, CPU usage, among others. Essentially, information that can then be used to have a sense of the current status and behavior of the system. 
+\par According to \cite{Huebscher2008}, there are two types of monitoring in self-adaptive systems:
+\paragraph{Passive Monitoring}
+\label{par:passivemonitoring}
+Consists of observation and collection of data without actually interfering with the operation of the system. For instance, operating systems provide tools for observing the CPU and memory usage, runtime information of the system, devices mounted, per-process information, among others.
+\paragraph{Active Monitoring}
+\label{par:activemonitoring}
+\par Involves engineering the software, adding code to its implementation specifically tailored to collect the specific required data.
+%
+%
+%
+\subsubsection{In-Network Aggregation}
+\label{sssec:innetworkaggregation}
+\par If we think of a distributed system with a high number of communicating nodes that need to share information about their performance, network traffic can become a limiting factor quite fast. As stated in \cite{Oreizy1999a}, there is a need for new techniques that reduce the monitoring overhead. Other applications with similar problems prompted research in solutions for \gls{ina}. Essentially, it consists of aggregating data in advance along the network path, i.e. combining or summarizing data as it travels through the communicating nodes \cite{Feng2023}. This is achieved through a distributed aggregation protocol \cite{Costa2018}, but since, in this context, monitored information changes over time, using a continuous aggregation protocol is the best approach. There are two approaches for in-network aggregation \cite{Fasolo2007}:
+\paragraph{In-Network Aggregation with size reduction:} Consists of combining and compressing information from distinct sources before sending it to the next node. For example, in a distributed system, a node receives the latency of other nodes. In order to reduce traffic over the network, one could pass along the average of the latencies instead of their isolated values.
+\paragraph{In-Network Aggregation without size reduction:} Consists of forwarding the data along the network without any kind of reduction. In a distributed system, when a node receives the latency from other nodes, it would simply combine them in one message and forward it to the next node.
+\par Choosing which approach to take will depend on the needs of the application, but above all, will depend on the need for accuracy of the information. For the purposes of this document, the main objective is of monitoring the overall performance of the system, meaning that the first approach might be the most adequate one, although the version without size reduction might be useful (e.g. detecting faulty nodes and outliers, which can only be done with lossless functions).
+\par Concerning aggregation functions, these are responsible for aggregating the data, meaning they take (collections or several entries of) data as an input and output the aggregated data. There are two main aspects that concern aggregation functions \cite{Fasolo2007}:
+\paragraph{Lossy and Lossless} Functions that compress data in either a lossy or lossless manner. With lossy functions, the original values are not recoverable and a certain degree of precision is lost. With lossless functions, the original values can fully be reconstructed after the function has been applied. %\todo{Adicionar citações "SIM!!!"}
+\paragraph{Duplicate Sensitive and Insensitive} %\todo{Citações} 
+Essentially, if the number of times the same information is considered affects the output, we have a duplicate sensitive function. If the output is the same no matter how many times the same information is considered, then it is a duplicate insensitive function. For example, an average function is duplicate sensitive, while a max value function is duplicate insensitive.
+\par Another aspect to consider in this context, is that these functions should not be resource intensive. If too much time and computing resources is spent on executing these functions, we lose efficiency, which is the main issue being tackled.
+\par Overall, monitoring is very dependent on the application, and for a general solution, it is important for mechanisms to be in place that can efficiently convey the current status of the system's performance, and \gls{ina} solutions might be important in the efficiency part. Since nodes will be sending their information to other nodes (as in gossip-based communication, Section~\ref{ssec:gossip_protocols}), a node will receive information from distinct nodes. An issue that may arise is the consideration of the same node more than once. Assume four nodes: \textit{node-1}, \textit{node-2}, \textit{node-3} and \textit{node-4}. If both \textit{node-2} and \textit{node-3} individually send information to \textit{node-4} that considers \textit{node-1}, \textit{node-4} might aggregate their information, considering the information of \textit{node-1} twice. To tackle this, we will make use of duplicate insensitive aggregation functions (although probably not as trivial as a \textit{max value} function). This will allow for information of the same node to produce the same result despite how many times it is considered.
+%
+%
+%
+\subsection{Planing \& Analyzing}
+\label{ssec:decidingonadaptation}
+\par Once a system has sufficient information about its state, it must then evaluate whether it is operating as intended or if it requires adaptation. If reconfiguration actions are indeed required, the system should determine the appropriate corrective measures necessary for it to return to the normal expected behavior. 'Analyzing' was also joined with this section due to it being very application dependent and also, usually being co-joined with the planning phase. %\todo{Eu aqui tinha dito que isto era trivial, assim está melhor?}
+Although there are many models (e.g. graph-based, process-based and state-based), according to \cite{Rosa2012}, policy-based solutions are considered to be the best approach. This is due to their declarative nature, which results in a better understanding by an operator, of the system and when it decides to adapt. Policy models can range from more simple solutions (like if-else behavior) to more complex solutions (e.g. policies that achieve a high-level goal).
+%
+%
+%
+\subsubsection{Policy-Based Planning}
+\paragraph{Event Condition Action Rules}
+\label{par:ecarules}
+\gls{eca} rules are located on the simpler side of policy-based models. \gls{eca} rules consist of a set of rules that specify what actions are taken by the system when certain events occur. When an \textbf{event} takes place, the \textbf{condition} is evaluated, and if it is met, an associated \textbf{action} is executed \cite{Mccarthy1989}. The designer of the system can specify what events should trigger a change, and what changes are triggered by each event.
+\par For example, consider a distributed system composed of nodes that communicate with each other using an epidemic broadcast strategy. If the delivery rate (i.e. rate at which messages are successfully delivered) decreases, it might be beneficial to increase the \textit{fanout} parameter. For this purpose, we might have an \gls{eca} rule specifying that, when the message delivery rate reaches a number less than $x$, increase \textit{fanout} to $y$.
+%\todo{Mudei o exemplo para ser o do epidemic broadcast}
+\par Although the idea of \gls{eca} rules was initially conceived in the context of databases, their concept fits perfectly in the context of self-adaptive systems and has widely been used in research done in its field. This is due to them providing a direct way of mapping specific events (e.g. when delivery-rate reaches a defined critical level) to actions (e.g. increase \textit{fanout}). So assuming a system is capable of collecting information about itself and of making changes to itself, implementing \gls{eca} rules would complete the system, enabling it to manage itself. However, a challenge associated to \gls{eca} rules, can be the extensive knowledge about the system that administrators must have. Since the whole concept is for events to be directly connected with actions, this means that, to conceive a policy, one must have a deep understanding of the system including potentially aspects related with their low-level nature. Another possible issue, might be the scalability of these rules. If a system grows to have more and more rules, it may become impossible to foresee what could occur in the event of multiple policies in place. These conflicts need to be resolved, and more research on this matter has emerged. Primarily, \cite{Lupu1999} proposes precedence relationships between policies, enabling the coexistence of inconsistent policies. Also, \cite{Kamoda2005} researched conflicting authorization policies.
+\paragraph{Goal Policies}
+\label{par:goalpolicies}
+Goal policies come as a more high-level approach to \gls{eca} rules, in the sense that, instead of defining a specific action, one would define a desired state, and let the system find a way to achieve that state \cite{Huebscher2008}. For instance, assume a distributed system composed of communicating nodes. We could specify that the communication latency between nodes in the system should remain under 50 ms. The autonomic manager (remember Section~\ref{ssec:mapek}) uses internal rules (i.e., knowledge) to adjust resources or configurations as needed to reach the desired state. An approach to goal-oriented policies was presented in \cite{Bandara2004}, where the general objective is to refine high-level goals into low-level operations that can subsequently be mapped onto \gls{eca}-based policies. In approaches like \cite{Sykes2008}, goals are expressed in a temporal logic (a formalism used to describe how propositions or conditions evolve over time),
+%\todo{Descobrir Citação para Isto e adicionar mais citações }
+ and plans are generated to achieve a particular goal in a given environment. 
+\par Goal policies require planning from the autonomic manager, making them more resource-heavy than \gls{eca} rules defined in the previous section. These policies also suffer from the fact that each state has to be described as desirable or not desirable, and if a desirable state cannot be reached, the system will not know which will be less desirable than the other.
+%
+%
+%
+\paragraph{Utility Functions}
+\label{par:utilityfunctions}
+Utility functions are a way to overcome the main problem of goal policies. Instead of states being classified as desirable or undesirable, states will have a scalar value of desirability. A utility function is a function that takes an expected effect of a configuration as input, and a value as output, which represents its level of desirability. Utility functions enable on-the-fly determination of an (expected) optimal feasible state, whereas goal policies guide the system toward any state that meets both feasible and acceptable criteria \cite{Walsh2004}. Usually, utility functions are used to compare alternative  configurations, where one applies it to the different expected effects of a given configuration, and based on the output, choose the best one.%\todo{Tentei explicar melhor, assim está ok?}
+\par The greater problem of utility functions is its definition. Every aspect that influences the decision must be quantified, although research concerning this question is being done. A contribution in the field of utility functions was presented in \cite{Walsh2004} where utility functions are employed to dynamically allocate resources within a realistic autonomic computing system.
+%
+%
+%
+\paragraph{Policy Languages}
+\label{par:policylanguages}
+\par Policy languages are a form of specifying policies in a system, i.e. specify policies in systems employing policy-based planning. Policy configurations are often described in XML format to ensure accuracy and compatibility across different platforms. Current methodologies provide only definition and configuration of policies prior to initialization of the system, meaning the policies defined remain static throughout the system's runtime. This is not ideal, as policies should be capable of self-adaptation to better align with the goals of the system.%\todo{Citação}
+\par For instance, consider a policy that adjusts the monitoring rate based on the level of dynamism in the monitored object's behavior. If the rate is too high, the associated processing and communication costs become excessive. However, if the rate is too low, the system might fail to respond to a sudden change \cite{Anthony2006}.
+\par The number of contributions to this field is extensive, but some notable ones include Ponder \cite{Damianou2001} and PDL \cite{Lobo1999}, which provide an \gls{eca} rule-based implementation, where Ponder was devised both for distributed system's and security management. Another contribution, specifically on the field of policy conflict detection and resolution (specifically \gls{eca}-based policies) is \cite{Chomicki2001}. Finally, a language specification that supports dynamic self-adaptation of policies \cite{Anthony2006}.
+%
+%
+%
+\subsubsection{Architectural Model Based Planning}
+\label{ssec:architectural_model}
+This approach consists of creating a model of the system (the \textit{architectural model}). This model reflects the system's behavior, outlines its requirements, and its objective. The model may also represent aspects of the system's environment. This model is then used to help reason about the impact of certain adaptations. The great benefit of this approach is that, assuming the model correctly represents the system's behavior, it is possible to observe how it will react to adaptations, and if it continues to operate smoothly. This is achieved by applying adaptations to the model first, observing the resulting state from the adaptations, and if the results are positive, apply them to the system.
+\par The use of this approach is compatible with the use of policy-based planning. The adaptations on the model can be specified with \gls{eca} rules. For instance, if the model starts operating outside the expected behavior, the correcting measures that return the model to a stable state might be specified by means of \gls{eca} rules.
+\par A negative aspect of this approach is the fact that, there will always be a delay between an event happening in the system, and the model being updated to reflect that event. If the delay is significant, and the system changes its state frequently, a specific planning might be carried out when the model assumes the system is under a state that in fact has already changed to another \cite{Huebscher2008}. For example, a distributed system where nodes communicate with each other. Assume that for a moment, latency increases drastically, but then returns to its expected value. Even though latency has already returned to its normal value, the system might already be deciding to increase the \textit{timeout} value as a counter-measure to an outdated state of the system. %\todo{"Isto talvez precise de um exemplo": Adicionei este, faz sentido?}
+%--------------------------------------------------------------------------------------
+\subsection{Execution}
+\label{ssec:execution}
+\par After planning completes, the system needs a way to carry out the selected adaptation plan successfully. Depending on the type of adaptation decided, different approaches by the same system may be taken, and the system might be disrupted in different levels.
+\par When we have nodes communicating with each other, one cannot simply decide to adapt on its own. For example, a node that decides to adapt while it is in the middle of communication with other nodes. Messages sent to a reconfiguring node will either be completely lost, or have to wait for the node to finish reconfiguration, leading other nodes to \textit{time out} and think that it failed. Moreover, if nodes have to switch protocols, and their messages are incompatible, those messages might be lost.%\todo{Tentei explicar melhor a cena do consistency issues}
+\par An approach to ensure the system operates as expected, is to make a node \textit{quiescent} before adapting. A node being in a \textit{quiescent} state, implies that it is not currently engaged in communication, either initiated by itself or any other node, i.e. before becoming \textit{quiescent}, a node has to complete any communication it is currently engaged in \cite{Kramer1998}. Before a node becomes \textit{quiescent}, it will usually become a \textit{passive} node, i.e. it will not initiate any communication, but will still answer to communication from other nodes. Another aspect of this approach, is that other nodes around the target, will have to become \textit{passive}, or they might initiate communication with it. To achieve this kind of coordination, some form of a configuration manager is needed to identify these surrounding nodes and change them to a \textit{passive} state.
+\par The work described in \cite{Goudarzi1996} suggests two algorithms. The first algorithm suggests letting ongoing communications finish, and then block all nodes of the system before adapting. This approach is disruptive as it stops the whole system, even though some nodes might not even be affected by the adaptation taking place. The second algorithm suggests only blocking the target nodes, and any others that are in current communications with a target. All requests made to any of those nodes will have to be postponed until after adaptation has taken place, but other nodes can continue operating unaffected.%\todo{Reduzi e tentei explicar melhor esta parte}
+%The first algorithm mentioned consists on letting ongoing communications terminate before blocking all nodes in the system to effect the change. If a node is \textit{idle} it will become \textit{blocked}, and if it is contacted by another node (that is still finishing its task) it will become \textit{unblocked} in order to respond. When all nodes are blocked, the change can effectively take place. In the second algorithm, only the nodes being affected will need to be blocked. This is restrictive because other unaffected nodes will not know that a change is taking place, and may try to contact blocked nodes. To solve this, nodes that receive requests from other nodes affected by change, become part of the group of affected nodes themselves. This results in the set of affected nodes growing beyond the directly affected however, it allows to safely block all nodes in that set. Requests from nodes outside the set will be postponed until after the adaptation has taken place.\todo{Provavelmente incluir aqui uma figura ou simplesmente explicar melhor esta ideia}
+\par Offering a less disruptive alternative, the work in \cite{Vandewoude2007} proposes a solution that only requires stopping the target node, and executing adaptation only when all other nodes assure they will not initiate any interaction with it. %\todo{Assim já está melhor explicado?}
+\subsubsection{Switching Protocols}
+\label{sssub:switchinprotocols}
+\par Distributed applications run several protocols. Depending on the conditions of the system and its environment, one might choose different protocols for different situations, which may require switching between them. Some protocols also need to maintain a state.
+\par Switching protocols is something that can become complex very rapidly, specially if the state of one protocol also has to be transferred to the new protocol. The work in \cite{Rosa2012} describes an example using two distinct \textbf{total order broadcast} algorithms. Total order broadcast,  a frequently used as a case study, ensures that all nodes receive messages in the same order. Assume two general protocols $TO1$ and $TO2$. Switching between two of these is not trivial, especially due to the system's distributed nature. If messages between the two are incompatible, and a node broadcasts a $TO2$ message, and another node is still executing $TO1$, that message might be lost. Moreover, if a node is executing $TO1$ and switches to $TO2$ without properly transferring its sate, messages can also be fully lost. To solve these issues, the general approach is to place nodes in a \textit{quiescent} state, and use consensus protocols to make them agree on when to change, and when communication can be resumed.%\todo{Aqui adicionei isto a dar assim um exemplo geral com o Total order broadcast}
+%Let us assume that two nodes are using protocol $A$, and are going to switch to a protocol $B$, and that messages from protocol $A$ are not compatible with messages from protocol $B$. If the two nodes do not change at the same time, they will be completely unable to communicate. This means that coordination among nodes is crucial. Also, protocols that have a state, may add complexity due to having to transfer the state of one protocol to the other\cite{Rosa2012}. In Section~\ref{ssec:cactusframework} and Section~\ref{ssec:appiaframework}, we discuss the switching mechanism of both these frameworks, which tackle the subjects discussed in this section.
+\par However, consensus protocols are quite complex and usually consume a lot of network traffic. To avoid the restrictive behavior that strong coordination among nodes is associated with, our work will focus more on the adaptation of protocol parameters, instead of changing the protocols being used altogether. %\todo{Mudei aqui a forma de explicar, se calhar assim percebe-se melhor}
+\subsection{Summary}
+\label{ssec:summary}
+\par Overall, the contents discussed in this section will prove important in the elaboration phase of our work. Since we are in the context of distributed systems, \gls{ina} will provide less network traffic and more efficient communication. Policy-based planning will be the main interest since they provide a clear relation between expected events and any actions of adaptation taken by the system. Specifically, we think \gls{eca} rules might be the best fitting option. Since we are mostly concerned with specific parameters of protocols, low-level knowledge of the protocol is needed. Finally, since this work will focus more on parameter adaptation of distributed protocols, complex solutions of executing adaptation might not be (strictly) necessary. Instead, solutions that cause less disruption in the system will be preferred (discussed further in Section~\ref{sec:proposed_solution}).
+%--------------------------------------------------------------------------------------
+%\subsection{Study Cases of Autonomic Computing}
+%\label{ssec:studycases}
+%\subsubsection{Ashby’s Ultra-Stable System}
+%\label{sssec:ultrastable}
+%\par Every machine encompasses infinite variables. We can also think of humans as being represented as sets of variables. From these sets, we will only take into consideration a selection of these which will be its essential variables. For an organism to survive, its essential variables should be set between viable limits, otherwise the system may face death.
+%\par A computing system can also be thought of like this. For instance, in a distributed system where clients need to communicate with replicas, if its essential variables such as latency, consistency or availability, exceed viable limits, the system may lead to degraded performance or complete failure.
+%\begin{figure}[h]
+%	\centering
+%	\includegraphics{ultrastablearch.pdf}
+%	\label{fig:ultrastable1}
+%	\caption{Ashby's Ultra-Stable System Architecture}
+%\end{figure}
+%\par This system consists of two subsystems: the environment and the reacting part. Reacting parts uses the sensor channels as its awareness mechanism and the motor channel as a way to carry out changes to the environment. Step mechanisms/Input Parameters triggers changes only when the environment affects the essential variables in a way that causes them to go outside their viable limits.\todo{Se for relevante, perceber melhor e continuar a escrever}
+%--------------------------------------------------------------------------------------
+%  _____                                            _        
+% |  ___| __ __ _ _ __ ___   _____      _____  _ __| | _____ 
+% | |_ | '__/ _` | '_ ` _ \ / _ \ \ /\ / / _ \| '__| |/ / __|
+% |  _|| | | (_| | | | | | |  __/\ V  V / (_) | |  |   <\__ \
+% |_|  |_|  \__,_|_| |_| |_|\___| \_/\_/ \___/|_|  |_|\_\___/
+%--------------------------------------------------------------------------------------
+\section{Frameworks}
+\label{sec:frameworks}
+\par In this section, we will examine relevant frameworks, for supporting distributed systems, these being Cactus which enables a survivable and self-adaptive system, Appia which enables customizable communication through the use of protocol stacks, R-Appia which adds support for adaptability to Appia, Rainbow which provides monitoring and adaptation for a system, and lastly Babel, a framework for development of distributed protocols. %\todo{Era mais ou menos isto aquilo de explicar para que é que serviam as frameworks?}
+These are either a good base for implementing self-adaptation, or have themselves made contributions to research of self-adaptive systems. In this chapter, we will be focusing on their primary objectives, their advantages and disadvantages, and, where applicable, how their autonomic capabilities compare to the work we are developing. %\todo{troquei a palavra autonomicity, está melhor?} Additionally, we will explore their limitations and explore possible improvements.
+%
+%
+%
+\subsection{Cactus Framework}
+\label{ssec:cactusframework}
+\par The main objective of Cactus \cite{Hiltunen1999} is to provide a system capable of survivability, i.e. tolerable to attacks and failures. The authors propose fine-grained customization which allows detailing many aspects of the system, enabling choice between trade-offs of different guarantees. They also propose dynamic adaptation allowing services to change their behavior at runtime as a reaction to intrusions or failures.
+\par Cactus addresses functional properties and quality of service attributes (e.g. reliability, performance, security). In order to provide a high degree of customizability, different properties and functions constitute different modules which interact trough events. A service is implemented as a composite protocol and each variant is implemented as a micro-protocol. A micro-protocol is in essence, a collection of event handlers, executed when a given event that they are bound to, occurs. An example of an event can be a message arrival.
+\par When it comes to adaptation, Cactus, due to its event-driven nature, allows for changing out old micro-protocols for new ones by simply binding and unbinding respective events. Cactus allows different approaches of adaptation, such as modifying parameter values of already in place protocols, and changing protocols in place for others. This second approach has two variants which are event-handler rebinding (discussed above), and dynamic code loading. Dynamic code loading implies that new micro-protocols are loaded into a running composite protocol.
+\par However, this approach of dynamic code loading demands coordination among peers, that is achieved through consensus protocols, which in turn are known to be very complex and consume a lot of network traffic. Moreover, adaptation is triggered by means of events, and since there is no centralized component, if too many adaptations occur at the same time starting in different nodes, some inconsistencies might occur. Another issue is related to the fact that the adaptation logic is joined with the adaptation execution, which may raise challenges in changing the adaptive behavior. Finally, Cactus does not offer concurrency management.
+%
+%
+%
+\subsection{Appia Framework}
+\label{ssec:appiaframework}
+\par Appia \cite{Miranda2001} is a framework that allows for building and composing network protocols, providing communication channels that use said protocol composition. Protocol compositions are referred to as protocol stacks, and can be reused to create different communication channels that comprise the same protocols. Appia is referred to as a protocol kernel, which is a framework that supports composition of micro-protocols. These micro-protocols are then organized in a stack. Appia also supports coordination between channels and a way to specify inter-channel constraints (e.g. channels that provide information about node failures).%\todo{Melhorei a explicação do Appia, assim já se percebe melhor?}
+\par An Appia module is called a \textit{layer} (a micro-protocol) that provides a service. Composing these layers on top of one another gives us a protocol stack that offers a given \gls{qos}. Once a stack is defined, multiple channels can be created implementing that same stack, which will have its associated \gls{qos}. A channel with a \gls{qos}  has also a stack of \textit{sessions}, which maintain state variables for each protocol. \textit{Sessions} interact through events.
+\par While Appia lacks built-in adaptive capabilities, it provides a solid foundation for their implementation. Its protocol composition enables fine-grained configuration, allowing a hypothetical adaptive component to dynamically switch between protocol stacks when system performance declines. This was achieved with R-Appia, which will be discussed in detail in the following section (Section~\ref{ssec:rappiaframework}).
+%\todo{View synchrony, e group communication. Explicar o channel}
+%
+%
+%
+\subsection{R-Appia Framework}
+\label{ssec:rappiaframework}
+\par R-Appia \cite{Rosa2007} is built on top of Appia, presented previously, and provides dynamic reconfiguration of protocols.
+\par Appia has some issues that prevent its support for adaptation, such as:
+\begin{itemize}
+	\item Does not include a mechanism for monitoring the system.
+	\item Only supports static protocol composition, meaning that protocols cannot be modified at runtime without stopping the system.
+	\item Does not have a mechanism that enables coordination among multiple nodes for reconfiguration.
+	\item Does not have a mechanism that forces channels to become \textit{quiescent} 
+	\item There is no mechanism that allows carrying over a state from one protocol stack to another.
+\end{itemize}
+\par R-Appia, comprises add-ons (additions to the Appia kernel without modifying it) that mitigated these issues, but also comprises changes to the Appia kernel.
+\par First, the authors address \textbf{context sensors} (that enable monitoring of system performance). To enable system monitoring, The authors created new event types, as well as a \textit{GenericSensor} that can be added to any protocol stack. R-Appia also provides a \textit{Channel Reconfigurator}, a technique that forces channels to become \textit{quiescent} by circumventing an optimization of event flow that restricted this behavior. R-Appia also introduces a \textbf{buffering layer}, which hides the reconfiguration from the application. Since the application does not know that a reconfiguration is taking place, it will keep sending messages, and the \textbf{buffering layer} is responsible for storing those messages until communication is restored. Also, the protocols developed for Appia also need some adjustments.
+\par R-Appia also presents a reconfiguration strategy to account for different types of reconfiguration. Some adaptations can be carried out  without any coordination of nodes and some require coordination between them. The elements of each combination include \textbf{orchestration}, which determines whether nodes require coordination, and \textbf{local reconfiguration mode}, which specifies whether the node must first become \textit{quiescent} or if the reconfiguration can be applied directly.
+\paragraph{Zero Quiescence} Reconfigurations that involve changing configuration parameters of protocols. This kind of reconfiguration does not require any coordination between nodes, i.e. orchestration is uncoordinated. Locally, the adaptation can be applied directly without need for the channel to become \textit{quiescent}.
+\paragraph{Local Quiescence} When the reconfiguration action does not involve changing the structure of messages that pass through the protocol stack. Nodes do not require coordination, but the protocol composition requires \textit{quiescence}. It also means that part of the state from the previous stack needs to be transferred to the new one.
+\paragraph{Global Quiescence} Nodes will need strong coordination between them. Protocol compositions will also need to be put in a \textit{quiescent} state just as in local \textit{quiescence}. This is highly intrusive, although necessary due to certain adaptations needing this intrusiveness.
+\par The mentioned features constitute add-ons to Appia, meaning that they do not involve modifications to the Appia kernel. These next modifications enact changes to the Appia kernel:
+\begin{enumerate}
+	\item \textbf{Pool of Headers:} A message in Appia contains a stack of headers, which every protocol pushes when the message passes through the respective protocol. This means that, when another node receives the message, each protocol will have to pop its corresponding header, which implies strong coordination among nodes. R-Appia, instead of a stack, proposes a pool of headers, where each protocol can check if its header exists and remove it from the message. This does not remove stacking of protocols, just headers in messages.
+	\item \textbf{Dynamic Update of Event Routes:} Appia only provides support for static composition of protocols due to an optimization regarding the pre-computing of routes for all events in a communication channel. The solution discussed in the last paragraph suggested putting the channel in a \textit{quiescent} state, but since we now are changing the kernel, a new solution can be implemented, which consists of storing the pre-calculated routes, and updating them relatively to the new protocol stack.
+\end{enumerate}
+\par R-Appia is a relevant approach to tackle decentralized adaptation approach, providing dynamic reconfiguration to the Appia kernel, either with add-ons or by modifying the kernel. Its main limitations, come from Appia, mainly the stacking of protocols, that is not ideal as it restricts communication, and also the fact that its execution is single-threaded. Moreover, it is not a scalable solution, as all nodes contact directly with the autonomic manager. This means that, if we have a high number of nodes in the system, all of them will be communicating their status with the monitor in the autonomic component, leading to scalability issues, possibly dragging the whole system to a halt.
+%
+%
+%
+\subsection{Rainbow Framework}
+\label{ssec:rainbowframework}
+\par The Rainbow Framework \cite{Garlan2004}, is a proposal on the architectural model based planning (referred in Section~\ref{ssec:architectural_model}). Rainbow makes use of architectural models to dynamically monitor and adapt a system, while also focussing on reutilization of adaptation strategies and infrastructure across different systems.
+\par To achieve the goal of reusability, Rainbow splits the framework in two aspects. The \textit{adaptation infrastructure}, which concerns the reusable aspect, and the \textit{system specific adaption knowledge} which, as its name indicates, concerns more system specific aspects. Rainbow is also divided into three infrastructures:
+\paragraph{System Layer Infrastructure} An infrastructure that represents communication with the actual system, containing probes and effectors to enact changes in the running system. 
+\paragraph{Architecture Layer Infrastructure} Responsible for the adaptation decision and execution. This layer contains \textit{gauges} that aggregate information received by the \textit{probes}, a \textit{model manager} that provides access to the architectural model, a \textit{constraint evaluator} that is responsible for detecting issues and triggering adaptations if needed. Finally, the \textit{adaptation engine} that determines how to correct the system, and then carries out the corrections.
+\paragraph{Translation infrastructures} Essentially a translator between the system layer and the architecture layer, that mediates mapping information across the abstraction gap between these two.
+\par Rainbow monitors the system (that runs in the system layer) through the \textit{model-manager}, while the \textit{constraint evaluator} evaluates the model for constraint violations, triggering the \textit{adaptation engine} if needed. The \textit{adaptation engine}, is then responsible for effecting changes on the running system.
+\par The adaptation knowledge is application specific. It consists of behavioral constraints, strategies and properties of components. Adaptation knowledge can be reused through the notion of \textit{architectural styles}, which can be used by systems that share semantic and structural properties between themselves.
+\par Rainbow separates the autonomic component fully from the system, thus being external to the system. Since it is based on architectural model planning, it might share their benefits, but also their negatives such as a delay between the model and the system, causing planning based on an outdated state of the system. It should be noted that the main focus of Rainbow is not on distributed systems.
+%
+%
+%
+\subsection{Babel Framework}
+\label{ssec:babelframework}
+\par Babel \cite{Fouto2022} is a framework that proposes hiding the tedious and time-consuming tasks of dealing with low-level aspects of designing distributed systems and protocols such as communication channels, timeouts, or tasks associated with dealing with concurrency issues. Babel makes an abstraction of the low-level network aspects and timer aspects, leaving the programmer to design the system/protocol without needing to spend much time on these concerns. Babel provides a programming environment for protocols and distributed systems, promoting event driven programming.
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.7]{babelarch.pdf}
+	\caption{Babel Framework Architecture}
+	\label{fig:babel_architecture}
+\end{figure}
+\par Figure~\ref{fig:babel_architecture} illustrates the architecture of Babel. The framework has three main components, which are:
+\paragraph{Protocols} Protocols are programmed by developers using Babel. A protocol is modeled as a state machine that evolves through receiving events which are queued in the \textit{event queue}. Events can be timer triggered, notifications, or events created specifically for the protocol being developed. Execution is also multithreaded as protocols have specific threads for handling events and a thread for themselves (i.e. protocols can execute concurrently, although without having any shared state).
+\paragraph{Core} The Babel core is the principal component responsible for mediating interaction between protocols (inter and intra process). When a process wishes to communicate with another one, it is the core that delivers events to connect them. When a process wants to communicate with another process, the core delivers the message to the appropriate network channel, which in turn sends the message to the appropriate network address. The core also handles receiving the message at the other process' end. Apart from this, the core also keeps track of timers and delivering events when the corresponding timer triggers.
+\paragraph{Network} The network is abstracted by Babel using channels. Instead of dealing with the challenges of handling low level aspects of network communication and error handling, Babel provides simple primitives for protocols to use for interacting with one another: \texttt{openConnection}, \texttt{sendMessage} and \texttt{closeConnection}. Channels generate specific events related with channels such as when an \textit{outgoing connection} is established or disconnected. Babel also provides a way for developers to create their own channels to help deal with network specific enforcement.
+\par Like Appia, Babel does not currently have any mechanisms to support adaptation. Moreover, Babel is a great foundation for building distributed systems, providing efficiency and removing the error-prone and time-consuming tasks of network communication.
+\subsubsection{Summary} After analyzing all frameworks presented in this section, Babel was chosen as the base framework, on which \textit{Overlord} will be built on top of. Apart from being developed "in-house", it provides some relevant benefits that other frameworks lack. For instance, Appia executes in a single thread across all protocols, and requires stacking them, leading to restrictions in interactions between them, whereas Babel provides a thread for each protocol and does not require stacking. Cactus doesn't offer concurrency management, while Babel shields the developer from issues related with concurrency by avoiding (mutable) shared state among protocols.

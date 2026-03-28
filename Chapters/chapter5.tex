@@ -1,0 +1,42 @@
+%!TEX root = ../template.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% chapter4.tex
+%% NOVA thesis document file
+%%
+%% Chapter with introduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\typeout{NT FILE chapter4.tex}%
+
+\chapter{Conclusion}
+\label{cha:conclusion}
+
+\prependtographicspath{{Chapters/Figures/chapter4}}
+
+% epigraph configuration
+\epigraphfontsize{\small\itshape}
+\setlength\epigraphwidth{12.5cm}
+\setlength\epigraphrule{0pt}
+%
+%
+%
+
+In this chapter we present the main achievements of this dissertation. This includes final deliberations on the solution and its performance on the implemented case study. We also elaborate on possible future work in order to further improve on the developed solution.
+
+\section{Conclusions and Contributions}
+With this dissertation, we delved into a gap in the scientific field of self-adaptive systems, exploring the possibility of adapting protocol parameters running in decentralized systems, with one central node. Evaluation of the case study proved this kind of architecture is possible in decentralized systems, as we demonstrated that with our implementation of Overlord. In every scenario presented, Overlord presented a better alternative, running optimistically during normal periods of execution, however switching to more costly approach when disturbances caused the system to perform undesirably.
+
+With this thesis, we made several contributions to the field of self-adaptation, providing a new architecture of designing self-adaptive systems, that allows a central node to measure the performance of the entire system, and allows developer defined rules, which are evaluated, and their outcome reconfigurations enforced through the entire system.
+
+Apart from this, another contribution was its implementation using the Babel framework\cite{Fouto2022} in the context of the research project TaRDIS\cite{TARDIS2023}, which since we approached its development in a modular fashion, allowed for not only a fully functioning framework for self-adaptation of protocols, but also an implementation of the MON-Collect protocol, that allows transporting large information from nodes of a system to a single node, with the added bonus of providing \gls{ina} for aggregating the data along the way. Moreover, we also contributed with a self monitoring gossip based broadcast protocol implementation, which is ready with metric collection, and also provided the implementation of the relevant aggregations, both in-node and in-network, for any developer using the metrics framework to use. Furthermore, we also contributed with a functioning Rule Engine and Reconfiguration Receiver, capable of, upon request, evaluating registered rules with access to provided monitored data and its history, and enforce these reconfigurations on the protocols of every node of the system. Finally, we provide a functioning message application which, using the developed framework, is capable of self-adaptation of the broadcast protocol it runs, using a rule that controls its fanout parameter based on the average reliability of the system.
+
+Finally, we also contribute with the writing of a paper that is to be submitted to the next 45th International Symposium on Reliable Distributed Systems (SRDS 2026).\todo{I don't think I can say much more here, but this looks empty.}
+
+\section{Future Work}
+While the proposed architecture of Overlord demonstrates effectiveness, it also highlights opportunities for further development.
+
+The first and most obvious one is the single point of failure on Overlord's architecture. As mentioned in Chapter~\ref{cha:relatedwork}, centralized systems contain a single point of failure, meaning that, if the Overlord node fails, the entire system will still function, however it will not react to changes in the system as the central node is absent. Overlord should always be closer to a super-node (as explained in Section~\ref{sssec:pure_decentralized_p2p_systems}), however even a node with these characteristics can be subjected to failures, such as losing connection or crashing. Because of this, one possible line of improving on this issue is to add a leader election algorithm (of a select array of super-nodes). Like this, when the overlord node is not accessible, a new one could be elected and the system would keep functioning as intended.
+
+Moreover, another research direction could be to explore the possibility of a system with an architecture similar to Overlord adapting entire protocol stacks, instead of simply adapting parameters of protocols.
+
+Another aspect worth mentioning is the matter of larger systems, with thousands of nodes. Since, due to testing limitations, we only performed tests on large systems (between around 200-400 nodes\todo{Must update by the end.}). This means that there is no way of knowing how Overlord would behave in a much larger system. As mentioned previously, Overlord collects metrics by creating a tree with all the participants of a system. This is a process that takes time, and so, the period between metric collections is limited by the time that an Overlord run takes in its entirety. Moreover, the longer this process takes, the more changes could happen to the system, leaving the created tree vulnerable to failures. In order to speed up this process, one idea is to instead of having a fully centralized architecture, to create groups of nodes, and have a leader per group of nodes. This leader would behave like the Overlord in terms of how it collects monitored data, however the component of evaluating rules and adapting the system would be stripped out. The Overlord node would trigger a new collection by sending an instruction to each leader, which would consequentially begin a MON-Collect run on each of its group of nodes. Upon completion of this process, each leader would then send the outcome of this operation to the Overlord node so that it could evaluate the defined rules.

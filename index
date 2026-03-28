@@ -1,0 +1,68 @@
+2. Related Work
+    2.1 Decentralized Systems
+        2.1.1 Peer-To-Peer Systems
+            2.1.1.1 Pure Decentralized P2P Systems
+            2.1.1.2 Hybrid P2P Systems
+        2.1.2 Membership
+        2.1.3 Overlay Networks
+            2.1.3.1 Unstructured Overlay Networks
+            2.1.3.2 Structured Overlay Networks
+        2.1.4 Gossip Protocols
+        2.1.5 Resource Location
+        2.1.6 Replicaiton Mechanisms
+        2.1.7 Case Studies of Decentralized Applications
+            2.1.7.1 Gnutella
+            2.1.7.2 Freenet
+            2.1.7.3 Content Addressabke Network - CAN
+            2.1.7.4 Pastry
+            2.1.7.5 PAST
+    2.2 Autonomic Computing
+        2.2.1 MAPE-K
+        2.2.2 Monitoring
+            2.2.2.1 In-Network Aggregation
+        2.2.3 Planning & Analizing
+            2.2.3.1 Policy-Based Planning
+            2.2.3.2 Architectural Model Based Planning
+        2.2.4 Execution
+            + Switching Configuration
+            2.2.4.1 Switching Protocols
+        + Knowledge
+        2.2.5 Summary
+    2.3 Frameworks
+        2.3.1 Cactus Framework
+        2.3.2 Appia Framework
+        2.3.3 R-Appia Framework
+        2.3.4 Rainbow Framework
+        2.3.5 Babel Framework
+3 Work Plan
+    3.1 Problem Description
+    3.2 Proposed Solution
+    3.3 Evaluation
+    3.4 Planning and Scheduling
+
+---- NEW STUFF ----
+?. Metrics (Something), Colection of metrics (Prometheus, OpenTelemetry)
++ More stuff to test than fannout, ?nº of neighbors?
+
+3. Overlord Framework
+    3.1 Monitoring
+        3.1.1 Integration with Babel Metrics
+        3.1.2 Protocol Instrumentation
+        3.1.3 Aggregation
+    3.2 MON-Collect
+    3.3 Planning and Analyzing
+        3.3.1 Rules
+        3.3.2 Rule Engine
+    3.4 Execution
+    3.5 Summary
+
+4. Evaluation
+    4.1 Message Broadcast Application
+        4.1.1 Evaluation in Different Scenarios
+    4.2 File Sharing Application
+        4.1.2 Evaluation in Different Scenarios
+    4.3 Summary
+
+5. Conclusion
+    5.1 Conclusions
+    5.2 Future Work

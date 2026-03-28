@@ -1,0 +1,467 @@
+%!TEX root = ../template.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% chapter1.tex
+%% NOVA thesis document file
+%%
+%% Chapter with introduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\typeout{NT FILE chapter3.tex}%
+
+\prependtographicspath{{Chapters/Figures/chapter3}}
+
+% epigraph configuration
+\epigraphfontsize{\small\itshape}
+\setlength\epigraphwidth{12.5cm}
+\setlength\epigraphrule{0pt}
+%
+%
+%
+\chapter{Overlord}
+\label{cha:overlord}
+
+%------------------------------------------------------------
+%  _____       _             
+% |_   _|     | |            
+%   | |  _ __ | |_ _ __ ___  
+%   | | | '_ \| __| '__/ _ \ 
+%  _| |_| | | | |_| | | (_) |
+% |_____|_| |_|\__|_|  \___/ 
+%------------------------------------------------------------
+In this chapter we introduce our designed solution. We present its components and how they interact to achieve the desired behavior. In Section~\ref{sec:architecture} we give an overview of the designed solution's architecture in order to provide a more generic understanding of how all components function together. Section~\ref{sec:monitoring} explains how Overlord monitors the entire system, as well as how to transport the collected information to the central component. Section~\ref{sec:ruleengine} details how a developer can create and define their own rules, and how Overlord uses the monitored data to evaluate these rules in order to decide and enforce adaptations to system protocols. In Section~\ref{sec:overlord_manager} we present the Overlord Manager, which contains the responsible for orchestrating all components of the designed solution. In this section, we also clarify the different responsibilities of both the developer and Overlord.
+
+%------------------------------------------------------------
+%                    _     _ _            _                  
+%     /\            | |   (_) |          | |                 
+%    /  \   _ __ ___| |__  _| |_ ___  ___| |_ _   _ _ __ ___ 
+%   / /\ \ | '__/ __| '_ \| | __/ _ \/ __| __| | | | '__/ _ \
+%  / ____ \| | | (__| | | | | ||  __/ (__| |_| |_| | | |  __/
+% /_/    \_\_|  \___|_| |_|_|\__\___|\___|\__|\__,_|_|  \___|
+%
+%------------------------------------------------------------
+
+\section{Architecture}
+\label{sec:architecture}
+
+Before explaining in depth the components of Overlord, it is important to understand what these components are and how they fit in the overall solution.
+
+Our solution consists of an architecture that enables a decentralized \gls{p2p} system to have a centralized component responsible for monitoring and improving its performance. This centralized component currently consists of one single node of the system, which is denominated the \textbf{Overlord} node, not to be confused with the Overlord sequence, which represents and entire sequence of Overlord, since it requests monitoring of the data, until it disseminates the decisions it made. An Overlord run, is a concrete execution of this sequence. The crucial steps that make up the Overlord sequence are:
+\begin{inparaenum}[(1)]
+	\item metric collection of the whole system,
+	\item metric data transportation to central node,
+	\item rule definition and evaluation, and
+	\item adaptation enforcement in all nodes.
+\end{inparaenum}
+We will provide a brief description of each of these steps for a better understanding of the general flow of execution, as well as explaining how Overlord orchestrates said components for them to work harmoniously.
+
+\paragraph{Metric Collection} This step consists of collecting the monitored metrics of each protocol running on a single node, while also performing any transformations necessary to the data collected.
+
+\paragraph{Data transportation to Overlord} We are dealing with decentralized systems, that need the ability to scale. For this reason, simply forwarding the monitored data to the Overlord node is not a viable solution, since it could overload it. It would also be expensive to the network, as redundant or unnecessary data would not be filtered out and would simply be sent directly to the Overlord node and be discarded there. As to develop a truly scalable solution, our architecture encompasses mechanisms that deal with such challenges. Our approach consists of creating a disposable single-use tree, that is used by each node to transport their monitored information to the central component. Along this path, monitored information not useful to the central component is also discarded through the use of aggregation functions\todo{I removed all mentions to MON-Collect. Left mention of the tree logic, however, maybe it should also be removed and swapped with "We came up with a solution for this", and not say anything else}.
+
+\paragraph{Rule Definition and Evaluation} With the monitored data, the system then needs to decide if any reconfigurations are necessary, and if so, which. For this purpose, we offer a mechanism that uses rules for adaptation, similar to \gls{eca} rules (Section~\ref{par:ecarules}). With this mechanism, the developer, who knows the system and its protocols, can define and register rules that will be evaluated in each Overlord run. If any reconfigurations are decided, this component will send them to other nodes. When creating a rule, the developer has access to the monitored data, as well as to a history of previous monitored data, in order to make it possible to detect overtime changes in the system's behavior (e.g. a continued increase in node count).
+
+\paragraph{Reconfiguration Enforcement and Dissemination} After Overlord decides on a reconfiguration, it must be disseminated to all nodes in the system in order to reach their respective protocols. Every node must listen to incoming reconfigurations from the central component. Upon receiving such reconfigurations, they are forwarded to their respective protocol. Our approach in dissemination of the reconfigurations also ensures that system load is balanced, and that this responsibility does not fall under one node or a specific group of nodes.
+
+\paragraph{Overlord Manager} Since Overlord represents the entire solution with the added components, along this chapter, we refer to the Overlord Manager, which represents the logic necessary to link all components that allow Overlord to fulfill its purposes. Its implementation is specified as a Babel protocol, which represents an interface of the entire Overlord sequence, abstracting the developer from the other components, as well as connecting all of them to work harmoniously.
+
+Figure~\ref{fig:architecture} presents our proposed architecture. It illustrates both the components that the main node is composed of, and the components that every participating node requires. It also shows how these components interact, both inside of the same node, and between different nodes. Dashed arrows represent interactions with participants not represented in the figure.
+
+\begin{figure}
+	\centering
+  	\includegraphics[scale=1.2]{architectureV2.pdf}
+ 	\caption{Architecture of Overlord and how each component interacts.}
+  	\label{fig:architecture}
+\end{figure}
+
+%Overlord is composed of components, which in the case of our implementation, are distinct protocols. As such, it is important to clarify the protocol stack of the central node, as well as the protocol stack of the remaining participating nodes of the system. In Figure~\ref{fig:overlordProtocols}, the Overlord protocols are depicted. It runs both MON-Collect (The component responsible for transporting monitored information to the central component) and the Rule Engine. It also runs a membership protocol, which both MON-Collect and the broadcast protocol use. The Rule Engine uses the broadcast protocol in order to disseminate the decided reconfigurations to remaining nodes. Figure~\ref{fig:nodeProtocols} depicts the protocol stack of every remaining node in the system. All nodes run MON-Collect, and a reconfiguration receiver, which uses the broadcast protocol to receive reconfigurations from other nodes, and apply them to the corresponding protocols.\todo{I think this is necessary, however I also think it shouldn't be here, or at least be more generic.}
+
+%\begin{figure}
+%\centering
+%\begin{subfigure}{.46\textwidth}
+%  \centering
+%  \includegraphics[scale=0.95]{overlordProtocols.pdf}
+%  \caption{Protocol stack run by the main node, the Overlord.}
+%  \label{fig:overlordProtocols}
+%\end{subfigure}%
+%\hspace{1cm}
+%\begin{subfigure}{.46\textwidth}
+%  \centering
+%  \includegraphics[scale=0.95]{nodeProtocols.pdf}
+%  \caption{Protocols run by a generic node of the system.}
+%  \label{fig:nodeProtocols}
+%\end{subfigure}
+%\caption{Protocol stack run by Overlord and remaining nodes, and their interaction.}
+%\label{fig:runningProtcols}
+%\end{figure}
+%\todo[inline]{Maybe improve caption of Fig.~\ref{fig:runningProtcols}. I removed how they interact. My goal here was simply to show which protocols interact with each other. I also have a figure with a more traditional protocol stack, however, it implies that a protocol is "stacked" on top of another, but actually they just work together.}
+
+%------------------------------------------------------------
+%  __  __             _ _             _             
+% |  \/  |           (_) |           (_)            
+% | \  / | ___  _ __  _| |_ ___  _ __ _ _ __   __ _ 
+% | |\/| |/ _ \| '_ \| | __/ _ \| '__| | '_ \ / _` |
+% | |  | | (_) | | | | | || (_) | |  | | | | | (_| |
+% |_|  |_|\___/|_| |_|_|\__\___/|_|  |_|_| |_|\__, |
+%                                              __/ |
+%                                             |___/ 
+%------------------------------------------------------------
+
+\section{Monitoring}
+\label{sec:monitoring}
+\par The action of monitoring a system is one that is very specific to each protocol running in that system. Since Overlord relies on a central component, there are two important steps in the monitoring phase:
+\begin{inparaenum}[(i)]
+	\item Collecting the metrics of protocols at each individual node
+	\item Transporting that information to the Overlord node.
+\end{inparaenum}
+Another aspect we address, is the aggregation of data along the network path to the Overlord node, which can improve efficiency of our solution. To address the monitoring of each individual node, as well as the aggregation of the data, we will use the already implemented Babel Metrics Framework\cite{Fouto2022,Paulico2025}, as further explained in Section~\ref{ssec:babel_metrics_framework}. For transportation of the data to the Overlord node, we developed an algorithm denominated as MON-Collect, explained in Section~\ref{ssec:moncollect}\todo{Cite MON, or the metrics framework, or something else?}.
+
+\subsection{Integration with Babel Swarm Metrics Framework}
+\label{ssec:babel_metrics_framework}
+
+Overlord was implemented using the Babel framework\cite{Fouto2022}, which contains an already implemented metric collection framework of protocols\cite{Paulico2025}. Metric collection is not the main subject of this thesis. As such, in addition to this mechanism is already being implemented in Babel, we integrated this framework into the Overlord sequence, allowing it to perform the monitoring of Babel protocols. This task is crucial to our solution, since it allows Overlord to evaluate the system's performance, and make the decisions about it.
+
+The Babel metrics framework allows developers to monitor hardware usage, while also providing data types such as counters, gauges and histograms, for measuring protocol-specific or general arbitrary metrics of implemented protocols. It also allows user defined metrics in form of records. This framework also provides a monitor that allows for collecting metrics in real-time, as well as an exporter which allows exporting the collected metrics. Both the provided monitor and exporter have available complete implementations. In terms of our implementation, the Manager is responsible for collecting monitored information from protocols, and exporting this information to other components, it serves as both the monitor and the exporter. When an Overlord execution is initiated, the Manager is used to collect the registered metrics of all relevant protocols, as well as performing the defined aggregations.
+
+\paragraph{Records} \label{par:records} Instead of using the metrics already available in Babel metrics, the developer might need to create their own metrics to monitor a given protocol. For this purpose, the developer may create records, which consist of a map, allowing the developer to map keys to values. Records work with strings, meaning that they map strings to other stings. However, the developer can and should transform their values and objects into strings when creating records, and then, transform them back into their original format when accessing those records. This added complexity layer is a necessity of working with the generic metric monitoring framework\todo{Does this make sense? Here I'm already talking low-level, so I thought it might make sense}.
+
+\subsection{Aggregation}
+\label{ssec:aggregation}
+
+\par Another available tool is the aggregation of data. Default metrics such as counters and gauges have predefined aggregations, however, if a developer needs records, they can define aggregations that specify how those records should be aggregated. In the context of our work, this has two benefits:
+\begin{itemize}
+    \item \textbf{In-Node Aggregation:} Since a protocol monitors crude metrics (e.g. number of messages, times at which a message was sent or received), it may be of interest to perform calculations with this data and transform it into more relevant and more easy to interpret metrics. Moreover, a protocol might monitor data that is relevant to other protocols, or some metrics might need data from more than one protocol in order to be calculated. For this purpose, before forwarding the monitored data, a node might aggregate all the data it monitored. This not only discards non-useful information at the node level (before it enters the network), but also can provide a much easier aggregation between nodes, since the individual monitored data is already curated\todo{I think this is much better explained now, however I feel like the word curated here is a bit odd.}.
+    \item \textbf{In-Network Aggregation:} After the collection and calculation of meaningful metrics, instead of transmitting them to the Overlord node, the data can be aggregated in order to send only the most relevant information. For example, when calculating the latest delivery time of a message, instead of each node sending the exact time at which it individually received the message, nodes can aggregate this information. Each node aggregates data with other nodes and keeps the most recent time. This way, the Overlord receives the final last delivery time without requiring every node's delivery time of that message.
+\end{itemize}
+
+One important aspect to mention is that, apart from the default metrics already defined, the aggregation of records consists of simply joining them on a list. For instance, considering an example of message records. Suppose that, in order to make decisions about the system, the central component needs to have the following information about a message: 
+\begin{inparaenum}[(i)]
+	\item Its ID,
+	\item the timestamp corresponding to its creation,
+	\item the timestamp indicating when it was last delivered, and
+	\item how many times it was delivered.
+\end{inparaenum}
+Simply joining two records of a same message on a list (which is the default behavior of the metrics framework), would imply keeping redundant information. First, for every record of the same message, both the ID and the creation timestamp would be repeated. Then, each node would also report the time at which it delivered the message. The central component would then be responsible to discard of redundant information, keeping only the most recent delivery time. As such, in order to harness the benefits of \gls{ina}, the developer must specify how to aggregate their custom metrics. A practical example of aggregation's benefits can be found in evaluation Section~\ref{par:message_record}\todo{I added this. Check if its good or if its just too much exposition.}.
+
+Ideally, protocols should be implemented considering metric collection, and if records are used, aggregations should also be provided, essentially creating a library of Overlord ready protocols. In case protocols are not using the metrics framework, or simply do not monitor enough information about themselves, the task of enabling them with the metrics framework falls upon the developer. If the protocols use records for monitoring without providing aggregations, the developer should implement these aggregations as they see fit. They can also use the default aggregation, however, this has the cost of ignoring the \gls{ina} component of Overlord.\todo{Since I already speak of this in the responsibilities part, I don't know if I should maintain them both or just leave it there.}
+
+\begin{figure}[!ht]
+    \centering
+	\includegraphics{metricsMonitoring.pdf}
+	\caption{How Overlord Collects and Aggregates Metrics.}
+	\label{fig:metrics_monitoring}
+\end{figure}
+
+Figure~\ref{fig:metrics_monitoring} depicts how the different components interact during metric collection. The Manager acts as the monitor, as it requests protocols for their monitored information, while also acting as the exporter, since it provides this information to other components (in this case, MON-Collect). However, before providing the monitored metrics, it performs any in-node aggregations defined. Moreover, the Manager is also responsible for in-network aggregation upon request.
+
+Finally, we have a mechanism to monitor each protocol and collect the necessary metrics on each node for the Overlord to decide on necessary reconfigurations. The only concern left is how this data will reach the Overlord node.
+
+\subsection{MON-Collect}
+\label{ssec:moncollect}
+This algorithm is heavily inspired on MON\cite{Liang2005}. Given that we are working with a scalable distributed system composed of an undetermined amount of participants, a node cannot simply transmit its data directly to the Overlord node. If all nodes of the system were to continuously contact the Overlord with their telemetry data, it could become overloaded with excessive communication and data processing. This solution is not scalable.
+
+An alternative approach would be for each node to broadcast its data, similar to a gossip-based broadcast protocol. However, this could pollute the network significantly, as protocol monitored data could be very large, and such broadcast solutions introduce a lot of duplicate information in order to reach a high probability of everyone receiving each broadcast\cite{Leitao2007a}. Another concern to consider is that, since the data of each node is being aggregated, if the aggregation operations are not idempotent, the same data may be considered more than once. For non-idempotent operations (such as summation or multiplication), this behavior is undesirable. Two possible solutions are to use only duplicate insensitive aggregation functions (as mentioned in Section~\ref{par:duplicate_sensitive_and_insensitive}), or maintain a list of nodes that have already been accounted for. However, this is not desirable, as the first solution limits the kind of aggregations that can be made significantly, and the second solution undermines the original goal of reducing network traffic, as a list that could become as big as the total number of nodes would be transmitted through the network. Another alternative is to ensure that each node's data traverses each node exactly once. The proposed algorithm ensures this behavior, while also enabling the aggregation of data at each node, without any restrictions to the aggregation functions used. The algorithm developed for this purpose is referred to as MON-Collect.
+
+MON-Collect constructs a disposable tree encompassing all participating nodes in the system, with the Overlord node as its root. This structure is then utilized to aggregate and transmit the monitored data up the tree, until it reaches the Overlord node. Maintaining this tree has costs, as nodes leaving or joining would mean repairing the tree\cite{Leitao2007a,Liang2005}. Instead of enduring such costs, we decided on creating a disposable tree for telemetry data collection, and subsequently discarding it once the process is complete. When a new execution is triggered, a new tree is then created. Since this tree is only needed at the instant in which it is created, instead of repairing the tree, a new one is made exactly at this moment, essentially taking a "snapshot" of the system. This means that creation of the tree should be cheap and fast, as the longer the creation of the tree takes, the more changes can affect the system during this period.\todo{I added this part comparing to repairable trees. Maybe I could even add a ref to that paragraph comparing MON and Plumtree. Review.}
+
+MON-Collect was also designed to be generic, allowing it to operate independently of Overlord, and to be used in different projects. This generality enables it to support arbitrary data types. In practice, the structure and semantics of the data, as well as the aggregation logic, are fully defined by the developer outside MON-Collect. This means MON-Collect needs assistance when working with specifics of the data being transported and aggregated. Overlord contains mechanisms for the developer to add or remove necessary intermediate steps. For example, the developer can introduce in-node aggregations (referenced in Section~\ref{ssec:aggregation}) before it is forwarded to be aggregated with data from other nodes.
+
+MON-Collect execution consists of two phases: The \textbf{Session Phase}, which is responsible for creation of the tree. The second phase is the \textbf{Monitor-Collect Phase}, which uses this tree for monitoring telemetry data of each node and transporting it to the Overlord.
+
+\paragraph{Session Phase} This step is responsible for creating a tree composed by the nodes of the system with the Overlord at the root of that tree. A tree implies that there are no cycles. This aspect is positive in the sense that, since there are no cycles, there is no risk that the information of a node might be considered more than once. This algorithm assumes that there is a protocol for management of the membership, which means that, at all times, every node must have a set of members it can contact.
+
+A MON-Collect run is the complete process since it is triggered at the Overlord node to the moment it receives the monitored data from the entire system. A run is triggered at the Overlord node, either by a periodic timer, or by command. By default, a run is triggered periodically, however, this is configurable. Each MON-Collect run contains a unique sequential ID. After triggering the execution at the Overlord node, the current ID is incremented, and a \texttt{SESSION} message is sent to each of the members of its membership. These nodes will subsequently send a \texttt{SESSION} message to each of their members, until it reaches all participant nodes of the system.
+
+\begin{figure}
+    \centering
+	\includegraphics[scale=1.2]{sessionPhaseNoColor.pdf}
+	\caption{Execution of the Session Phase.}
+	\label{fig:session_phase}
+\end{figure}
+
+At this point, all nodes are trying to establish one single parent, and their children. When a node receives a \texttt{SESSION} message, it sets its parent to the sender of that message, after which it sends a \texttt{SESSION} to its members and waits for a response from all of them before sending a \texttt{SESSION\_OK} to its parent. For each \texttt{SESSION} message a node receives after it has defined their parent, it responds with a \texttt{PRUNE} message, ensuring that each node receives a response. After a node has a response from every member (either a \texttt{SESSION\_OK} or a \texttt{PRUNE}), it will send the \texttt{SESSION\_OK} to the established parent. When the Overlord receives a \texttt{SESSION\_OK}, then the tree is fully created, and the Monitor-Collect phase may begin.
+
+This process is illustrated in Figure~\ref{fig:session_phase}. First, a run is triggered at the Overlord node. Considering that both nodes $a$ and $b$ compose overlord's membership, it will send a \texttt{SESSION} message to both of them. Both nodes set their parent to Overlord, establishing it as their parent. Node $a$ has in its membership only node $b$, thus it sends a \texttt{SESSION} message to it. As node $b$'s parent is already set to Overlord, it sends a \texttt{PRUNE} back to node $a$. Assuming node $b$ has more members not represented in the figure, it will send a \texttt{SESSION} message to them. After their response, node $b$ has its children, meaning it can answer Overlord with a \texttt{SESSION\_OK} message. Since node $a$'s membership is only composed of node $b$, as soon as node $b$ answered (with a \texttt{PRUNE} message), node $a$ answers with a \texttt{SESSION\_OK} to Overlord.
+
+Figure~\ref{fig:tree} presents a possible membership between the nodes of the system, and one possible resulting tree from the Session phase, represented by the blue edges.
+
+\begin{figure}
+    \centering
+	\includegraphics[scale=1.2]{membershipAndTree.pdf}
+	\caption{Example of a possible resulting tree from an arbitrary membership.}
+	\label{fig:tree}
+\end{figure}
+
+MON-Collect also has the option for specifying a timeout value, which is the time that a node waits for answers. In case the node does not receive an answer from all its members, it will simply carry on with the responses it already has.\todo{Mention the new way of nodes not timing out before their children do.}
+
+If a node happens to respond too late to its parent, its message will simply be ignored, as its parent will check that either the ID was already processed, or the ID is the same as the current one, only the Session phase has already passed. This late node, upon receiving a new \texttt{SESSION} message with a higher ID, will simply discard its current state, and join the more recent run.
+
+\begin{figure}
+    \centering
+	\includegraphics[scale=1.2]{lateNodeSession.pdf}
+	\caption{Example of a run where node $c$ fails to respond to its parent within the expected time}
+	\label{fig:late_node_session}
+\end{figure}
+
+This behavior is represented in Figure~\ref{fig:late_node_session}. Blue arrows represent messages from MON-Collect run $x$ and red arrows messages from run $x+1$. Dashed arrows represent messages from or to other participants not represented in the figure. Node $a$ receives a \texttt{SESSION} message from its parent, which is forwarded to its neighbors $b$ and $c$. While node $b$ sends a \texttt{SESSION\_OK}, node $c$ takes time to send its response, and by the time it does so, node $a$ has already responded to its parent. Consequentially, when node $c$ answers, its message is ignored as the Session phase for run $x$ has already passed. Eventually, run $x+1$ begins, only this time both nodes answer in time, and both node $b$ and $c$ are a part of run $x+1$.
+\todo[inline]{I have a figure that maps MON-Collects behavior, so maps what happens when a node in state $x$ does when it receives message $y$. Don't know if that would be nice to include somewhere, or how I would include it.}
+
+At the end of the Session phase, the resulting tree is considered disposable, as a new tree is created for each execution of the algorithm, as to avoid concerns of patching the same tree over time. Consequentially, creation of the tree should be as cheap and as fast as possible. Failures occurring during the execution of the algorithm is not ideal, however they can happen. In case a node fails after the creation of the tree, the failed node and its children will not be considered in that run. The specifics of what happens during a failure and how it can affect decisions made by Overlord can be found at Section~\ref{sssec:tree_drop}\todo{Should I keep this part about failure?}.
+
+\paragraph{Monitor-Collect Phase} After the Session phase, the algorithm makes use of the constructed tree to transport the monitored data from each node to the Overlord.
+
+Upon completion of the tree, the Overlord sends a \texttt{MONITOR} message to its assigned children. Nodes, upon receiving a \texttt{MONITOR} message, forward this message to their children. Simultaneously, each node collects the monitored data from all selected protocols. The Overlord node, in case it is participating in the system, should also execute this step. The node replies with a \texttt{COLLECT} message directed to itself (containing its own monitored data). Similarly, each child transmits \texttt{COLLECT} messages with their own monitored data.
+
+In terms of our implementation in Babel, this implies communication between the MON-Collect protocol and the Manager protocol, which works as the monitor, being responsible for collecting the metrics monitored and supplying them to MON-Collect. After collection of such metrics, the Manager forwards them to MON-Collect, while also performing any in-between steps the developer decides.
+
+\par Upon receiving a \texttt{COLLECT} message, the node appends the content to a collection. If a node has $n$ children, then it expects $n+1$ \texttt{COLLECT} messages ($n$ from each child, and 1 from itself). Once the node receives all the expected \texttt{COLLECT} messages, it aggregates the data. In terms of implementation, aggregation is a task of the Manager, not of MON-Collect, so MON-Collect issues a request for the aggregation of data to the Manager protocol. It then interprets the data provided, and aggregates it according to the developer's specification. After aggregating all the data from the different \texttt{COLLECT} messages, the Manager subsequently triggers an event, indicating that the aggregation process is complete. MON-Collect, after receiving the aggregated data, forwards it to its parent. When the Overlord node receives all the \texttt{COLLECT} messages, the MON-Collect run has concluded.
+
+\begin{figure}
+    \centering
+	\includegraphics[scale=1.2]{monitorCollectPhase.pdf}
+	\caption{Example of the Monitor-Collect phase.}
+	\label{fig:monitor_collect_phase}
+\end{figure}
+
+This process is presented in Figure~\ref{fig:monitor_collect_phase}. The Overlord node, sends a \texttt{MONITOR} message to node $a$, which subsequently sends it to its (in this case) only child, node $b$. Node $b$ forwards it to its children, not represented in the figure. Simultaneously, both node $a$ and node $b$ collect the metrics from the monitored protocols, and reply to themselves with a \texttt{COLLECT} message. After receiving a \texttt{COLLECT} message from their children, both nodes aggregate the data and forward it to their respective parent. Overlord then receives a \texttt{COLLECT} message, meaning that the process is complete.\todo{I added this figure and explanation. Is it good?}
+
+\subsubsection{Handling Failures in the Monitor-Collect Phase}
+\label{sssec:handling_failures_in_the_monitor_collect_phase}
+\todo[inline]{Maybe no subsubsection here}
+
+In case a node fails, there is also a configurable timeout value for the Monitor-Collect phase, however, since the tree is already created, the available information allows for a more sophisticated approach. If a node very close to the bottom of the tree has failed, then its parent node will wait a certain amount of time for its response. However, if all nodes wait the same amount, since messages between parent and child take time to reach their destination, nodes closer to the root will timeout before the parent of the node that failed can timeout and answer back to its parent. Consequentially, instead of simply losing information of one node (the one that failed), the information of that entire branch would be lost. Because of this, during the creation of the tree, each node reports to its parent (along with the \texttt{SESSION\_OK} message), the height of its subtree (with the node itself being the root of this subtree), denominated $h$\todo{This is very awkward here.}. For example, if a node has no children, then it will report $h = 0$. The parent node will then check all the $h$ values reported by its children, and report to its parent the highest $h+1$. There are also two more parameters (which are configurable), these being the base wait time $b$ and the modifier value $m$. The final wait time $t$ of each node is then calculated as $t = b + m\times h$. With this approach, if a node at the bottom of the tree fails, its parent will wait less time than a node at the top, and the parent node's timeout answer will reach its parent before they themselves timeout, effectively losing only the information of the failed node, and those below them.
+
+Since Overlord is built on top of Babel, which uses TCP connections, when a node fails or gets disconnected, the channel established between the nodes is closed, and an event is triggered. When this happens, MON-Collect, given that it is executing in the Monitor-Collect phase, will check if the failed node was a part of its process. If the failed node was its child, then the number of needed responses decreases in order to avoid having to wait for a failed node. If the failed node was its parent, then it overrides the parent and sets it directly to be Overlord. In case a response was not yet sent to the parent, the \texttt{COLLECT} will be sent directly to the Overlord node instead, as shown in Figure~\ref{fig:failed_parent_example}. In the event that the information was already sent to the parent, and then the parent failed, nothing can be done, since there is no way of knowing if the parent failed after it sent a \texttt{COLLECT}, or if the failure occurred before this event. Figure~\ref{fig:failed_parent_bad_case} illustrates why sending the data to Overlord regardless of whether it was already sent would not work. Node $b$ sends its data to node $a$, which forwards it to Overlord just before it fails. Node $b$ then receives a notification of node $a$'s failure, prompting it to send its data to the Overlord instead. This leads to node $b$'s data being considered twice. As such, if a parent fails after data was already sent, there is nothing to be done, and there is a risk that this node will not be considered in this run. With this approach, a parent of a failed node will not have to wait for it, and its children will have a chance that their monitored data is still considered on this collection.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=1.2]{failedNodeMonitorExample.pdf}
+  \caption{An Example of a node's behavior when its parent fails.}
+  \label{fig:failed_parent_example}
+\end{figure}
+\begin{figure}
+  \centering
+  \includegraphics[scale=1.2]{failedNodeBadCase.pdf}
+  \caption{A visual representation of why a node cannot simply retransmit its data to Overlord after its parent has failed.}
+  \label{fig:failed_parent_bad_case}
+\end{figure}
+
+Before explaining the rest of the Overlord sequence, it is important to have a clear vision of how a full MON-Collect run could be, as well as how it interacts with other protocols. Figure~\ref{fig:full_mon_collect_execution}, illustrates a small portion of a system executing a full MON-Collect run. Dashed arrows represent communication with elements not represented in the figure (either protocols or other nodes), while blue arrows represent communication between different nodes and red arrows represent communication in the same node by different protocols.
+\todo[inline]{I cannot put the full execution figure before the rule engine. Please help.}
+
+\begin{figure}[h]
+    \centering
+	\includegraphics[scale=1.2]{fullMonCollect.pdf}
+	\caption{Example of a Full MON-Collect Execution.}
+	\label{fig:full_mon_collect_execution}
+\end{figure}
+
+%------------------------------------------------------------
+%  _____       _        ______             _            
+% |  __ \     | |      |  ____|           (_)           
+% | |__) |   _| | ___  | |__   _ __   __ _ _ _ __   ___ 
+% |  _  / | | | |/ _ \ |  __| | '_ \ / _` | | '_ \ / _ \
+% | | \ \ |_| | |  __/ | |____| | | | (_| | | | | |  __/
+% |_|  \_\__,_|_|\___| |______|_| |_|\__, |_|_| |_|\___|
+%                              | |    __/ |             
+%                __ _ _ __   __| |   |___/              
+%               / _` | '_ \ / _` |                      
+%  _____       | (_| | | | | (_| |                      
+% |  __ \     | \__,_|_| |_|\__,_|                      
+% | |__) |   _| | ___  ___                              
+% |  _  / | | | |/ _ \/ __|                             
+% | | \ \ |_| | |  __/\__ \                             
+% |_|  \_\__,_|_|\___||___/                             
+%------------------------------------------------------------
+
+\section{Rule Engine and Rules}
+\label{sec:ruleengine}
+After MON-Collect finishes its execution, the monitoring phase is completed and the Overlord node has access to the monitored data from every protocol of every node in the system. After this, Overlord must analyze this data, check if the system is functioning as expected, and if not, take action to make changes to improve the system. This is the task of the Rule Engine.
+
+This thesis' approach is inspired on \gls{eca} rules. \gls{eca} rules allow the developer to specify a condition (such as defining that a certain value should be lower than a threshold), and an action that is triggered when this condition is met. This concept was further explained in Section~\ref{par:ecarules}. This approach allows the developer to create conditions which are specific to parameters of protocols/applications they developed, and create actions linked to these conditions.
+
+\subsection{Rules}
+Before explaining how the Rule Engine functions, it is important to first understand rules, and how they can be created. Rule definition and creation was designed with Babel in mind. Developers can create protocols based on a Generic Protocol, which enforces them to contain certain key methods and parameters. The same is true for messages, as they can be created based on Proto-Messages. In our case, developers can create a rule by extending a Proto-Rule, which enforces every rule to have key parameters and methods, such as: 
+\begin{inparaenum}[(1)]
+	\item An ID, identifying each rule,
+	\item a name,
+	\item and a description;
+	Apart from these parameters, every rule must have:
+	\item The \textit{evaluate} method, which allows the Rule Engine to prompt a registered rule to be evaluated.
+\end{inparaenum}
+
+Parameters must be specified by the developer. If two rules with the same ID are registered by the Rule Engine, it will throw an error and abort execution. Both the name and the description are only used for debugging purposes.
+
+The \textit{evaluate} method is mandatory, and its implementation falls upon the developer. Ideally, designers of Babel protocols could implement rules and package them with the protocols they create, however, rules do not simply depend on the protocols they are meant for. They also depend on the type of system where they execute, and its environment, which could affect usage of the protocol. This means that, even with packaged rules, a developer should always adjust these to the type of system it designs.
+
+The \textit{evaluate} method has two input parameters:
+\begin{inparaenum}[(1)]
+	\item The monitored data ($d$), and
+	\item the history ($h$).
+\end{inparaenum}
+The monitored data is, as its name implies, the metrics monitored by the Overlord in the current run, and the history is a list of previously monitored data. The size of the history can be configured. The history allows the developer to have a sense of the evolution of system performance (e.g. detecting a continuous increase of nodes over time). A rule also outputs a collection of reconfigurations $r$.
+
+Evaluation of a rule is then defined as: \textit{evaluate}$(d,h) = r$\todo{The equation you mentioned was it this it?}. Figure~\ref{fig:rule_input_and_output} illustrates a generic rule. As is depicted, it has two inputs and one output, and evaluation of this rule, providing both inputs, results in a list of reconfigurations as output\todo{I really don't know if this explains much. Please give input.}.
+
+\paragraph{Reconfigurations} Reconfigurations consist of key-value pairs, where the key represents the parameter being adapted, and the value represents its new value. These pairs must be associated with an identifier of the protocol to which they are meant for, in order for the component responsible for reconfigurations to correctly disseminate them to their respective protocol. In terms of their Babel implementation, these are represented by "Reconfigure" objects. These consist of a map from names of parameters to their new reconfigured values. If a developer needs to reconfigure, for example, a parameter $p$ of their protocol, they must add the \texttt{@adaptive} tag to that parameter. They must then create a new Reconfigure object, and add an entry for $p$ (e.g. \texttt{<"$p$", 4>}).
+
+Each rule will output a list of pairs, composed of reconfigurations, and identifiers for the protocols they are meant for (i.e. \texttt{(<parameter, value>, protocol)}). Control of this list is fully handled by the developer inside each rule.
+
+Rules are evaluated by the order of their registration, following a \gls{fifo} order.
+
+\begin{figure}
+    \centering
+	\includegraphics[scale=1.2]{ruleInputAndOutput.pdf}
+	\caption{Example of a rule.}
+	\label{fig:rule_input_and_output}
+\end{figure}
+\todo[inline]{Improve Figure~\ref{fig:rule_input_and_output}.}
+
+\subsection{Rule Engine}
+After the rules designed by the developer are implemented, there must be a component that evaluates them all and disseminates their outcome to the appropriate protocols. This is the task of the Rule Engine. In order for rules to be evaluated, the developer must first register them. At the start of execution, the Rule Engine will then, one by one, register them. It is also possible to register and unregister rules upon request, meaning that, a developer can control which rules are actively being evaluated during execution of the system. Upon completion of the metrics collection process, the Overlord Manager forwards the collected information to the Rule Engine, which then evaluates each registered rule.
+
+\paragraph{Reconfiguration Receiver} Since only the central component runs the Rule Engine (as it is the only one that makes decisions), remaining nodes also require a component responsible for receiving reconfigurations. This is the task of the Reconfiguration Receiver. As each reconfiguration also mentions the protocol it is meant for, this component simply waits for reconfigurations, and upon receiving them, forwards them to their respective protocol.
+
+In terms of its implementation in our framework, reconfigurations are disseminated through means of gossip-based broadcast. The Reconfiguration Receiver inspects all messages from the broadcast protocol, and checks if any contain reconfigurations. If reconfigurations are found, the Reconfiguration Receiver will iterate through them, forwarding them to the appropriate protocol. In the case of the Overlord node itself, it does not need to run this protocol, as the Rule Engine implements this exact behavior.
+
+Figure~\ref{fig:reconfigurations} depicts a generic example of this process. Blue arrows represent messages through the network, while red arrows represent interaction between protocols of a same node. The Rule Engine decides that protocol 1 should set its $f$ parameter to 5. It then sends a request with the reconfiguration as payload to the broadcast protocol, which disseminates it to all nodes (in this case represented as a single node). The Reconfiguration Receiver, upon checking that a broadcast delivery contains reconfigurations, disseminates this reconfiguration to protocol 1. The Overlord node, receives its own message, prompting the Rule Engine to forward the reconfiguration to the appropriate protocol.
+
+\begin{figure}
+    \centering
+	\includegraphics[scale=1.1]{reconfigurations.pdf}
+	\caption{Example of reconfiguration dissemination and execution.}
+	\label{fig:reconfigurations}
+\end{figure}
+
+During the development of this dissertation, the idea to use the tree created by MON-Collect in order to disseminate the decided adaptations was proposed. However, this idea was quickly discarded, as a single failed node could lead to an entire branch of the tree not receiving the reconfigurations and keep operating on different parameters than the ones decided. A gossip-based broadcast approach was not used for collecting the monitored data due to it generating a lot of duplicate messages, which, since they contain the monitored data of each node, could become large messages. In this case, reconfigurations do not take as much space as monitored data, with the largest message being the number of adaptive parameters times the number of protocols. As such, it is a cost-effective solution to use a less exposed to failure approach,\todo{"Careful". Should I put back reliable broadcast or just leave it as it is?} ensuring every node receives the reconfigurations, and guarantees\todo{Maybe take the "guarantees" off here.} every node's protocol is operating on the same parameters.
+
+\paragraph{Execution of Reconfigurations} After all evaluations, the Rule Engine must then disseminate the reconfigurations decided to all participants of the system (including itself). In Section~\ref{ssec:execution}, it was referred that adaptation on a \gls{p2p} system, can introduce some challenges. If two nodes decide two distinct adaptations, they could start operating on different terms and break the entire system. Since in our solution, only the central component makes decisions, such complications do not arise. Moreover, our solution's adaptive mechanism ensures idempotent reconfigurations, as they map parameters to their new values, not modifiers (i.e. a reconfiguration that sets a parameter to the current value + 1 does not exist).
+
+The architecture of a centralized component also allows reconfigurations that  depend on previous values, by tracking and storing decisions made and which values were decided. When a modifier (e.g. an increment to the current value) is needed, the Overlord can simply retrieve the last value it decided, and apply the modifier. It then disseminates the new value, instead of the modifier\todo{I still have the image for clarification if this is too confusing.}.
+
+Execution, as referenced in Section~\ref{ssec:execution}, can be a challenging aspect depending on the kind reconfiguration decided. Since our solution only deals with adaptation of protocol parameters, reconfiguration can be done without the need for any kind of cooperation between nodes, meaning they can directly exchange the old values for the new ones.
+
+%\begin{figure}
+%\centering
+%\begin{subfigure}{.46\textwidth}
+%  \centering
+%  \includegraphics[scale=1.2]{dependentDecisions1.pdf}
+%  \caption{The Overlord decides parameter fanout to be 3, and disseminates it to other nodes.}
+%  \label{fig:dependentDecisions1}
+%\end{subfigure}
+%\hspace{1cm}
+%\begin{subfigure}{.46\textwidth}
+%  \centering
+%  \includegraphics[scale=1.2]{dependentDecisions2.pdf}
+%  \caption{The Overlord decides parameter fanout to be the current fanout + 1, so it accesses its stored value.}
+%  \label{fig:dependentDecisions2}
+%\end{subfigure}
+%\caption{Example of how Overlord allows adaptations on top of previous values of %parameters, without risking two nodes having different configurations.}
+%\label{fig:dependentDecisions}
+%\end{figure}
+
+With this, we have a way for the developer to write rules that are evaluated periodically and adapt parameters of certain protocols, and also provided a way for these reconfigurations to be disseminated across the entire system. Figure~\ref{fig:rule_engine_full} depicts an example execution of the Rule Engine and the Reconfiguration Receiver components, and how they interact with the other components.
+
+\begin{figure}
+    \centering
+	\includegraphics[scale=0.95]{ruleEngineFull.pdf}
+	\caption{Example of a Full Rule Engine Execution.}
+	\label{fig:rule_engine_full}
+\end{figure}
+\todo[inline]{Should I explain this figure?}
+
+%------------------------------------------------------------
+%   ____                 _               _  
+%  / __ \               | |             | | 
+% | |  | |_   _____ _ __| | ___  _ __ __| | 
+% | |  | \ \ / / _ \ '__| |/ _ \| '__/ _` | 
+% | |__| |\ V /  __/ |  | | (_) | | | (_| | 
+%  \____/  \_/ \___|_|  |_|\___/|_|  \__,_| 
+% |  \/  |                                  
+% | \  / | __ _ _ __   __ _  __ _  ___ _ __ 
+% | |\/| |/ _` | '_ \ / _` |/ _` |/ _ \ '__|
+% | |  | | (_| | | | | (_| | (_| |  __/ |   
+% |_|__|_|\__,_|_| |_|\__,_|\__, |\___|_|            
+%------------------------------------------------------------
+
+\section{Overlord Manager}
+\label{sec:overlord_manager}
+This represents our main component, which orchestrates the already explained components for them to work as one, achieving a single common goal.
+
+Apart from interacting with each component, it also serves as an abstraction of these components to the developer. Instead of having to configure and interact with MON-Collect parameters, or with the Rule Engine separately, the developer needs only to interact with the Overlord Manager, becoming fully abstracted from the components that compose Overlord.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=1]{overlordManager.pdf}
+  \caption{Interactions between the Overlord manager and other components.}
+  \label{fig:overlord_manager}
+\end{figure}
+\begin{figure}
+  \centering
+  \includegraphics[scale=1.1]{overlordNodeManager.pdf}
+  \caption{Interactions between the Node Manager and other components.}
+  \label{fig:overlord_node_manager}
+\end{figure}
+
+In terms of our implementation of this architecture, it is represented as a Babel protocol. While the central node runs the Overlord Manager, the remaining nodes run the Node Manager.
+
+Figure~\ref{fig:overlord_manager} depicts how the Overlord Manager interacts with each component, while Figure~\ref{fig:overlord_node_manager} depicts the same, only for a generic system node. Protocols $a$ and $b$ represent generic protocols that are chosen to be monitored by the developer. Since only the Overlord node has a Rule Engine, most interactions of the Node Manager are specifically with MON-Collect. 
+
+Some responsibilities of the Manager are:
+\begin{itemize}
+	\item \textbf{Providing MON-Collect the Monitored Data:} The Manager is responsible for collecting the metrics from the selected protocols, and providing them to MON-Collect. In the case of Figure~\ref{fig:overlord_manager} and Figure~\ref{fig:overlord_node_manager}, these are protocols $a$ and $b$. The Manager, for each of the monitored protocols, retrieves the monitored metrics since the last collection, supplying them to MON-Collect.
+	\item \textbf{Aggregating Data from Other Nodes:} As MON-Collect works with generic data, one of the tasks of Overlord is to handle specifics of data types. The Manager is responsible for aggregating the data upon request, by deserializing the raw bytes into metrics, performing the predefined aggregations by the developer, and then encoding the result into raw bytes and forwarding them to MON-Collect, so they can be transmitted to the next node.
+	
+	Figure~\ref{fig:manager_aggregation} presents an example of this interaction. Protocol $a$ is the one being monitored, specifically, its parameter $n$, which is always 1 for every single node. The defined aggregation is to sum the different $n$ values. Note that this means the Overlord node, upon receiving the final $n$ value, should observe the total number of nodes of the system, since $n$ is 1 for each node. Dashed arrows represent interactions with elements not depicted in the figure. First,  MON-Collect requests the monitored data from the Manager, which collects them from the monitored protocol $a$. Protocol $a$ answers with its own monitored metrics, which in this case is the $n$ value set to 1. The Manager then encodes this data into raw bytes for it to be sent to MON-Collect. After receiving all \texttt{COLLECT} messages from all its children nodes (in this case, only the data from itself, and another node), it will issue a request for aggregation of the data. MON-Collect sends a list containing all bytes to the Manager. These are then deserialized into metrics, as the first is its own data $n = 1$, and the one received from its child $n = 5$ (a result of aggregation with its own children's metrics). The Node Manager then aggregates this data, summing them ($ n = 1 + 5 = 6$). It will then encode this data into raw bytes, and forward them to MON-Collect, so they can be sent to its parent.
+	
+\begin{figure}
+  \centering
+  \includegraphics[scale=1.2]{managerAggregation.pdf}
+  \caption{Interactions between the Node Manager and other components.}
+  \label{fig:manager_aggregation}
+\end{figure}
+
+	\item \textbf{Registering and Evaluation of Rules} After completion of MON-Collect, the Overlord Manager receives the monitored data of the system, and is responsible for triggering the Rule Engine to start evaluation of the rules. In terms of its implementation, the Manager is also where the developer should register rules, as to abstract the developer of having to deal with separate components.
+\end{itemize}
+
+Apart from the mentioned main duties, there are other tasks enabled by the Manager, such as customizability of the Overlord sequence. In case the developer needs to add elements between each step, several tools exist to facilitate it\todo{Essentially its overriding methods, but I don't know if I should just put it here as I'd talk too much Java.}. One example part of our case study, was to use aggregations during the monitor data phase, in which the monitored data is collected, however, before forwarding this data to MON-Collect for it to be aggregated with data from other nodes, an in-node aggregation is performed in order to transform bare metrics into refined metrics, which are to be aggregated with refined data from other nodes and analyzed by Overlord. The specifics of this thematic are further explored in Section~\ref{par:in_node_aggregation}.
+
+\paragraph{More on Knowledge} \label{par:more_on_knowledge} Another task related to the Manager, is storing or sharing the monitored data. The Manager can share the monitored data of the system to help other external tools or protocols that might need it (for example external analysis tools such as Prometheus\cite{Prometheus2012}). Consequentially, the Overlord Manager provides a configuration that stores monitored data in a \texttt{JSON} file, while also disseminating a notification containing the monitored data. Any interested protocol may subscribe to it and obtain the monitored data\todo{Too much Babel?}.
+
+Finally, it is also responsible for numerous configurations of the Overlord sequence. For instance, it is possible to configure the time between each run and to enable or disable this periodic timer. It also allows specification of whether Overlord is a participating node of the system, or only an observer.
+
+Before moving to the next thematic, it is important to establish a now more informed view on how Overlord works. In Figure~\ref{fig:mapek_on_overlord}, we align our solution with the MAPE-K loop, as referenced in Section~\ref{ssec:mapek}, since it is a foundation for autonomic systems even today\todo{Is this good?}. It illustrates the flow of Overlord execution. The knowledge component is not represented as it does not correspond to a phase, but a source of information that the loop accesses when needed\todo{Check if this makes sense.}. However, the knowledge component is mainly contained in the Rule Engine.
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=1]{mapek-on-overlord.pdf}
+	\caption{Execution steps of an Overlord sequence and their relation to the MAPE-K loop phases}
+	\label{fig:mapek_on_overlord}
+\end{figure}
+
+\subsection{Responsibilities of Overlord}
+\label{ssec:responsibilities_of_overlord}
+Our solution allows a generic system to monitor itself and react to behavior changes that arise during execution, by means of enforcing rules. Because of this, some components cannot be generalized for all systems. These components' specification and implementation constitute a task of the developer.
+
+Consequentially, it is crucial to clarify what are the responsibilities of the developer, and what is handled by Overlord. It is also important to clarify that, in terms of its implementation, Overlord has default behaviors for running without any tampering needed from the developer, although this provides very coarse grained monitoring and control of the system's behavior, and in this case, the developer must still be the one to implement and register rules.
+
+\paragraph{Monitoring} Monitoring a system is very dependent on system semantics. Depending on which protocols are running, how many nodes are running each protocol, and what parameters might need to be adjusted, a developer could decide to monitor different aspects of the system. Consequentially, monitoring protocol metrics is a responsibility of the developer. Overlord has mechanisms for defining what metrics are to be collected of which protocols, and mechanisms for registering aggregations, but their definition and implementation must be carried out by the developer. Ideally, the protocols should already include metric collection and aggregations defined for those metrics, essentially creating a library of Overlord ready protocols. Overlord's default behavior is to collect all metrics, and to perform all default aggregations, thus, assuming protocols have aggregations already defined, the developer needs only to register the aggregations for metrics that use records. Consequentially, if protocols do not have these mechanisms, the responsibility of integrating them into the protocols falls upon the developer.
+\todo[inline]{This could be shorter. Should I shorten it?}
+
+\paragraph{Data Collection} After defining what metrics are to be collected and how they are aggregated, this data is collected individually on each node and requires MON-Collect in order to reach the Overlord node. This process is entirely handled by Overlord. There are a few parameters configurable by the developer, such as the time between collection of metrics, but most of this process is carried out by Overlord.
+
+\paragraph{Rule Definition, Evaluation and Enforcement} Creation and implementation of rules, constitutes a responsibility of the developer, as they are the ones that best know the protocols they implement, and should know what parameters could be adjusted to improve overall performance of the system. However, the process of evaluating these rules, is entirely handled by Overlord. The developer can, on request, register and unregister rules, but the rest of the process is handled automatically by Overlord.
+
+%------------------------------------------------------------
+%   _____                                            
+%  / ____|                                           
+% | (___  _   _ _ __ ___  _ __ ___   __ _ _ __ _   _ 
+%  \___ \| | | | '_ ` _ \| '_ ` _ \ / _` | '__| | | |
+%  ____) | |_| | | | | | | | | | | | (_| | |  | |_| |
+% |_____/ \__,_|_| |_| |_|_| |_| |_|\__,_|_|   \__, |
+%                                               __/ |
+%                                              |___/ 
+%------------------------------------------------------------
+
+\section{Summary}
+\label{sec:overlord_summary}
+In this chapter, we presented the solution developed during this dissertation. First, we gave an overview of the full architecture of Overlord, helping understand how all the components work together. Then, in detail, we explained MON-Collect, which provides our main component metrics from the entire system on-demand and efficiently, saving in network traffic. We then detailed the Rule Engine, which allows the developer to define rules, which it periodically evaluates, improving the performance of their protocols based on the collected information. We also present how Overlord orchestrates such components in order to fulfill its objective, as well as how it abstracts the developer of the complexities of said components. Finally, we clarify the responsibilities of both the developer and Overlord, in order to provide a better understanding of what a developer using this architecture, will have to concern themselves with. In the following chapter, we present the evaluation for our solution. 
