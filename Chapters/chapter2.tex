@@ -525,11 +525,11 @@ Rainbow separates the autonomic component fully from the system, thus being exte
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.7]{babelarch.pdf}
+	\includegraphics[scale=1]{babelarch.pdf}
 	\caption{Babel Framework Architecture}
 	\label{fig:babel_architecture}
 \end{figure}
-\par Figure~\ref{fig:babel_architecture}\todo{Improve this figure.} illustrates the architecture of Babel. The framework has three main components, which are:
+\par Figure~\ref{fig:babel_architecture} illustrates the architecture of Babel. The framework has three main components, which are:
 
 \paragraph{Protocols} Protocols are programmed by developers using Babel. A protocol is modeled as a state machine that evolves through receiving events which are queued in the \textit{event queue}. Events include triggered, notifications, or events created specifically for the protocol being developed. Execution is also multithreaded as protocols have specific threads for handling events and a thread for themselves (i.e. protocols can execute concurrently, although without having any shared state).
 
