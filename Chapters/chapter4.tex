@@ -63,7 +63,7 @@ Figure~\ref{fig:recordAggregation} illustrates this phenomenon. Figure~\ref{fig:
   \caption{Instead of forwarding both records to its parent, node $a$ creates $m3$ with only the necessary information.}
   \label{fig:recordAggregation2}
 \end{subfigure}
-\caption{A Visual representation of the benefits of record aggregation in this case study}
+\caption{A visual representation of the benefits of record aggregation in this case study}
 \label{fig:recordAggregation}
 \end{figure}
 
@@ -156,7 +156,7 @@ The same experiment will be conducted for two\todo{Change this to 3 when ready.}
 \begin{figure}
     \centering
 	\includegraphics[scale=0.93]{NodeInflux/nodesEvolution.pdf}
-	\caption{Node count evolution over time}
+	\caption{Node count evolution over time on the node influx experiment.}
 	\label{fig:node_influx_nodes_evolution}
 \end{figure}
 
@@ -171,7 +171,7 @@ Moreover, between minute 60 and minute 80, the reliability is constantly low, as
 \begin{figure}
     \centering
 	\includegraphics[scale=0.93]{NodeInflux/overlordReliabilityEvolution.pdf}
-	\caption{Average reliability of Overlord evolution over time.}
+	\caption{Average reliability of Overlord evolution over time on the node influx experiment.}
 	\label{fig:node_influx_overlord_reliability_evolution}
 \end{figure}
 
@@ -180,7 +180,7 @@ This phenomenon is undesired, and is mostly a limitation of choosing to monitor 
 \begin{figure}
     \centering
 	\includegraphics[scale=0.93]{NodeInflux/reliabilityComparisonEvolution.pdf}
-	\caption{Comparison of the average reliability evolution over time.}
+	\caption{Comparison of the average reliability evolution over time on the node influx experiment.}
 	\label{fig:node_influx_reliability_comparison_evolution}
 \end{figure}
 
@@ -199,7 +199,7 @@ In this experiment, we test how Overlord reacts to the scenario where some nodes
 \begin{figure}
     \centering
 	\includegraphics[scale=0.93]{CrashedNodes/nodesEvolution.pdf}
-	\caption{Node count evolution over time.}
+	\caption{Node count evolution over time on the crashed nodes experiment.}
 	\label{fig:crashed_nodes_overlord_evolution}
 \end{figure}
 
@@ -212,7 +212,7 @@ Now we must compare the performance of our solution to static configuration alte
 \begin{figure}
     \centering
 	\includegraphics[scale=0.93]{CrashedNodes/reliabilityEvolutionFanout.pdf}
-	\caption{Average reliability evolution over time.}
+	\caption{Average reliability evolution over time on the crashed nodes experiment.}
 	\label{fig:crashed_nodes_reliability_evolution}
 \end{figure}
 
@@ -221,7 +221,7 @@ Figure~\ref{fig:crashed_nodes_reliability_evolution} presents the average reliab
 \begin{figure}
     \centering
 	\includegraphics[scale=0.93]{CrashedNodes/rmrEvolutionV2.pdf}
-	\caption{Average RMR evolution over time.}
+	\caption{Average RMR evolution over time on the crashed nodes experiment.}
 	\label{fig:crashed_nodes_rmr_evolution}
 \end{figure}
 
@@ -248,7 +248,7 @@ This experiment reflects a specific scenario, in which some nodes only want the 
   \caption{As the fanout increased to 5, $a$ now has a new neighbor $f$ which delivers $m$ to it.}
   \label{fig:freeridersexperiment2}
 \end{subfigure}
-\caption{A visual example of the expected improvements of Overlord on the free riders experiment}
+\caption{A visual example of the expected improvements of Overlord on the free riders experiment.}
 \label{fig:freeridersexperiment3}
 \end{figure}
 
@@ -259,7 +259,7 @@ Another aspect to consider, is the bias that randomization introduces. Since we 
 \begin{figure}
     \centering
 	\includegraphics[scale=0.9]{FreeRiders/freeRidersOverlordReliability.pdf}
-	\caption{Average reliability evolution over time}
+	\caption{Average reliability evolution over time on the free riders experiment.}
 	\label{fig:freeridersOverlordReliability1}
 \end{figure}
 
@@ -268,7 +268,7 @@ Another aspect to consider, is the bias that randomization introduces. Since we 
 \begin{figure}
     \centering
 	\includegraphics[scale=0.9]{FreeRiders/freeridersReliabilityComparisonWFanout.pdf}
-	\caption{Comparison of Average Reliability Evolution over Time}
+	\caption{Comparison of average reliability evolution over time on the free riders experiment.}
 	\label{fig:freeridersReliabilityComparison1}
 \end{figure}
 
@@ -281,7 +281,7 @@ All applications behave similarly during the first 4 minutes. When the pit nodes
 \begin{figure}
     \centering
 	\includegraphics[scale=0.9]{FreeRiders/freeridersLatencyComparison.pdf}
-	\caption{Comparison of Average Latency Evolution over Time}
+	\caption{Comparison of average latency evolution over time on the free riders experiment.}
 	\label{fig:freeridersLatencyComparison}
 \end{figure}
 
@@ -294,7 +294,7 @@ Figure~\ref{fig:free_riders_rmr_comparison}, shows the comparison between the av
 \begin{figure}
     \centering
 	\includegraphics[scale=0.9]{FreeRiders/freeridersRMRComparison.pdf}
-	\caption{Comparison of the Average RMR over Time.}
+	\caption{Comparison of the average RMR over time on the free riders experiment.}
 	\label{fig:free_riders_rmr_comparison}
 \end{figure}
 
@@ -307,7 +307,7 @@ Our solution uses a disposable tree for collecting information. One aspect that 
 \begin{figure}
     \centering
 	\includegraphics[scale=0.9]{TreeDrop/nodesEvolution.pdf}
-	\caption{Evolution of the number of nodes over time.}
+	\caption{Evolution of the number of nodes over time when information is lost.}
 	\label{fig:tree_drop_nodes_evolution}
 \end{figure}
 
@@ -316,14 +316,14 @@ Figure~\ref{fig:tree_drop_nodes_evolution} presents the evolution of the reporte
 \begin{figure}
     \centering
 	\includegraphics[scale=0.9]{TreeDrop/reliabilityEvolution.pdf}
-	\caption{Evolution of average reliability over time.}
+	\caption{Comparison and evolution of average reliability over time when information is lost.}
 	\label{fig:tree_drop_reliability_evolution}
 \end{figure}
 
 \begin{figure}
     \centering
 	\includegraphics[scale=0.9]{TreeDrop/fanoutEvolution.pdf}
-	\caption{Evolution of average reliability over time.}
+	\caption{Comparison and evolution of the selected fanout over time when information is lost.}
 	\label{fig:tree_drop_fanout_evolution}
 \end{figure}
 
@@ -368,7 +368,7 @@ Similarly to the free riders experiment, HyParView can introduce a certain bias,
 \begin{figure}
     \centering
 	\includegraphics[scale=0.9]{PacketLoss/packetlossOverlordReliability.pdf}
-	\caption{Average reliability evolution over Time}
+	\caption{Average reliability evolution over time on the packet loss experiment.}
 	\label{fig:packetlossOverlordReliability}
 \end{figure}
 
@@ -381,7 +381,7 @@ As mentioned previously, these results alone are not enough to draw conclusions,
 \begin{figure}
     \centering
 	\includegraphics[scale=0.9]{PacketLoss/packetlossReliabilityComparisonWFanout.pdf}
-	\caption{Comparison of Average Reliability Evolution over Time}
+	\caption{Comparison of average reliability evolution over time on the packet loss experiment.}
 	\label{fig:packetlossReliabilityComparison}
 \end{figure}
 
@@ -392,7 +392,7 @@ Figure~\ref{fig:packetlossReliabilityComparison} shows the evolution of the aver
 \begin{figure}
     \centering
 	\includegraphics[scale=0.9]{PacketLoss/packetlossLatencyComparison.pdf}
-	\caption{Comparison of Average Latency Evolution over Time}
+	\caption{Comparison of average latency evolution over time on the packet loss experiment.}
 	\label{fig:packetlossLatencyComparison}
 \end{figure}
 
@@ -401,7 +401,7 @@ Moreover, it is also important to note that the latency during the disturbance p
 \begin{figure}
     \centering
 	\includegraphics[scale=0.9]{PacketLoss/packetlossRMRComparison.pdf}
-	\caption{Comparison of Average Reliability Evolution over Time}
+	\caption{Comparison of average RMR evolution over time on the packet loss experiment.}
 	\label{fig:packet_loss_rmr_comparison}
 \end{figure}
 
