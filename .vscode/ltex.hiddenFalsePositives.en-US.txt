@@ -25,3 +25,4 @@
 {"rule":"ENGLISH_WORD_REPEAT_BEGINNING_RULE","sentence":"^\\QProtocols run by Overlord\\E$"}
 {"rule":"POSSESSIVE_APOSTROPHE","sentence":"^\\QThese scenarios are: Free riders scenario, which tests if increasing the fanout parameter to a value higher than \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q, improves reliability, by simply having some nodes choose to receive messages, however not forwarding them to neighbors, and Packet loss, which allows us to test this same aspect, only instead of some nodes not forwarding messages, a certain percentage of messages are lost and not delivered.\\E$"}
 {"rule":"AGREEMENT_SENT_START","sentence":"^\\QGanglia provides distributed scalable monitoring of\\E$"}
+{"rule":"ENGLISH_WORD_REPEAT_BEGINNING_RULE","sentence":"^\\QInteractions between the Manager and other Overlord components.\\E$"}
