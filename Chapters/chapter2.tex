@@ -125,7 +125,6 @@ Overall, the choice of which approach to use comes down to a trade-off between r
 
 \subsubsection*{Performance Metrics of Gossip-Based Broadcast}
 \label{sssec:perfrmance_metrics_of_gossip_based_broadcast}
-\todo[inline]{Professor João Leitão says this should be lower in the document.}
 The case study we have implemented relies on adapting a gossip-based broadcast protocol. As such, in order for our component to make changes to its parameter, it must have an understanding of how the system performs. Therefore, we reference important metrics\cite{Leitao2007a, Leitao2010a}, which indicate how they can help monitor the performance of this type of broadcast protocol.
 
 \paragraph{Reliability} \label{par:reliability} The reliability of a system represents the percentage of correct nodes that delivers each disseminated message. A reliability of 100\% means that the broadcast protocol functioned correctly, and every node successfully delivered all sent messages. If the reliability is bellow 100\%, it means that not all nodes received every message. Ideally this value should be as high as possible, meaning that, if not all nodes are receiving every message, the broadcast strategy should be changed.
