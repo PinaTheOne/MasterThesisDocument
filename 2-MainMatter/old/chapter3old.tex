@@ -1,0 +1,78 @@
+%!TEX root = ../template.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% chapter1.tex
+%% NOVA thesis document file
+%%
+%% Chapter with introduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\typeout{NT FILE chapter3.tex}%
+
+\chapter{Work Plan}
+\label{cha:workplan}
+
+\prependtographicspath{{Chapters/Figures/chapter3}}
+
+% epigraph configuration
+\epigraphfontsize{\small\itshape}
+\setlength\epigraphwidth{12.5cm}
+\setlength\epigraphrule{0pt}
+%
+%
+%
+\section{Problem Description}
+\label{sec:problem_description}
+\par As stated previously in Chapter~\ref{cha:introduction}, this work aims to devise a centralized autonomic component that manages a pure decentralized system. Current autonomic solutions are either fully centralized, not considering distributed systems at all, or fully decentralized, where nodes manage themselves, often requiring coordination. This coordination, although for some adaptive actions is needed, is not ideal as it puts a system under stress with a lot of network traffic for coordination. If nodes also need to share telemetry information with one another, this can also put a heavy load on the network. Moreover, scalability is a key factor, as a decentralized system must consider a very dynamic topology, with numerous nodes constantly leaving and joining its network.
+\par This means that there is scope for the study of an approach that is scalable and consumes less network traffic.%\todo{Mudei para ficar assim. Era mais ou menos isto?}
+
+%As stated previously in Chapter~\ref{cha:introduction}, existing solutions\todo{This work aims for... explicar que como dito no cap 2, estas soluções têm limitações x} for adaptive systems are either centralized, or decentralized. While centralized solutions go strictly against the premise of decentralized systems, decentralized approaches are very decentralized, leaving management to each node, or to protocols that coordinate nodes.
+%\par Hybrid solutions, have centralized autonomic components that manage the entire system, but are not scalable. For example, R-Appia has a centralized manager, but all nodes establish contact directly with the manager. This means that, if we have a large scale system with a lot of nodes, those nodes will continuously communicate directly with the manager, possibly leading to overloading the manager, the system becoming very slow, or even unavailable.
+%
+%
+%
+\section{Proposed Solution}
+\label{sec:proposed_solution}
+\par The proposed solution, is to develop a centralized component that manages a decentralized large scale system, based on its telemetry information collaboratively gathered by other processes. This component will receive information on the current performance of the system, and will be tasked with evaluating the presence of any issues, choosing a course of action and disseminating it to the rest of the nodes. It is important to note that, our solution will focus more on adjustment of protocol parameters. Another caveat of this solution is that it has to be scalable, i.e. performance should be unaffected independently of the total number of nodes of the system.
+\par To this end, we aim to develop our solution on top of the Babel-Swarm framework, which has some features of interest, mainly a vast library of already implemented protocols and some mechanisms for adapting a protocol at runtime. We have named our solution \textit{Overlord}.
+\par Some design aspects that are to be considered include:
+\paragraph{Centralized or Partially Centralized Component} The core premise of our work is that the autonomic manager is centralized. This centralization can consist of just one node that is fully responsible for autonomic management of the whole system. However, another suggested alternative that is to be considered, is a hierarchy of nodes. A system could have one central node (denominated \textit{Overlord}) which has in its \textit{partial view}, a number of nodes which are responsible for disseminating the \textit{Overlord}'s decisions and aggregating the system's performance data before sending it back to the \textit{Overlord}. Depending on its implementation, this second approach could improve scalability of the system, but also raises some questions, mainly, how to elect these intermediary nodes, how many should there be relatively to the number of nodes of the system, and how to recover if one of them fails.
+\paragraph{Communication with the \textit{Overlord}} As stated previously, the problem with existing hybrid solutions, is that they are not scalable due to all nodes of the system having to communicate with the centralized \textit{Overlord} node for it to assess current performance of the system. Considering a decentralized large scale system, this is highly restrictive because one node will be constantly receiving updates by a large number of nodes. An approach to solve this, is to use a gossip-based protocol. Instead of all nodes communicating with the central node, nodes will send their performance to their neighbors, which will in turn aggregate their performance with the ones they receive, until it reaches the \textit{Overlord}. This distributes the load much more efficiently and fairly, and consequentially, the central node will also receive already aggregated information, ready for processing. Increasing the number of nodes will not affect the central node, because those nodes will leverage the benefits of \gls{p2p} systems, cooperating to aggregate all information for the central node. Figure~\ref{fig:overlord} provides a visual representation of how communication with the \textit{Overlord} should be conducted.
+\begin{figure}
+	\centering
+	\includegraphics{overlord.pdf}
+	\caption{Proposed Communication With the \textit{Overlord}}
+    \label{fig:overlord}
+\end{figure}
+\paragraph{Dissemination of Decisions} Once the \textit{Overlord} makes a decision of adapting the system, it has to disseminate it. One option is for the \textit{Overlord} to directly contact each node in the managed system to instruct it of the changes that are to be carried out. However, this is not really balanced, as it puts the complete load on the \textit{Overlord}. A more reasonable way of disseminating decisions is to also use gossip-based communication for dissemination of decided changes, improving system load balance.
+\paragraph{Planning} Since our focus will be on parameter adjustment, it is imperative that an operator has low-level knowledge of the protocol they are developing. With that in mind, our approach will lean more towards be \gls{eca} rule based planning, providing direct relation from events to action, which is ideal for a developer of a protocol.%\todo{Adicionei esta parte, à partida não deve ter nada de mal}
+\par For our initial solution, we will be choosing a mix of the centralized and partially centralized approach. Some nodes will be responsible for aggregating the telemetry data from their neighbors, and only these will deliver the aggregated data to the \textit{Overlord}. Dissemination of adaptation instructions will be done in an epidemic broadcast fashion. During the elaboration of our work, we might return to these relevant aspects and, based on results from the first evaluation, reason if any other alternative should be taken. %\todo{Adicionei esta parte a explicar exatamente a primeira abordagem para depois falar no schedule}
+%
+%
+%
+\section{Evaluation}
+\label{sec:evaluation}
+\par To correctly evaluate the developed component, a series of tests will be conducted. These tests will compare systems running already established and tested protocols, which will be our case studies (discussed further ahead). For each test, we will compare a static version of the protocol, with a protocol running the developed component. Additionally, we subject both systems to the same conditions and will analyze how both systems behave in adverse conditions, such as adding a high number of nodes, removing nodes, among others.
+\par As mentioned, we will use applications using already tested protocols as case studies, such as:
+\paragraph{Broadcast Application} A simple application for broadcasting a message to all peers in a network.
+\paragraph{File Sharing Application} Similar to applications such as Napster \cite{Napster} and Gnutella \cite{Bordignon2001}. Additionally, we will make use of a \gls{dht} to distribute files and to locate files (similarly to Pastry, in Section~\ref{sssec:pastry}), making use of protocols like Chord \cite{Chord2003} or Kademlia \cite{Kademlia2002}.
+\par Both these applications will make use of some protocols, specifically for communication and membership of the system. Protocols that will be relevant in these applications constitute:
+\paragraph{Gossip-Based Protocols} The epidemic broadcast approach. In our case, we will compare a system that runs a static \textit{fanout} compared to a system that changes the \textit{fanout} based on gathered performance.
+\paragraph{HyParView Protocol \cite{Leitao2007}} A membership protocol that ensures high levels of reliability in the presence of a high rate of failures. This protocol proposes two distinct views at each node, a small \textit{active view} and a larger \textit{passive view}, both of which can be tweaked considering the number of nodes in the system. Apart from these, there are other parameters such as a \textit{shuffle period} and \textit{check connectivity period}.
+%\todo[inline]{Voltar a adicionar o fireflies se houver tempo}%\paragraph{Fireflies\cite{Johansen2015}} An overlay network which combines full membership with a pseudo-random structure to provide a trade-off between tolerance to Byzantine faults and scalability. Falar no related work
+\paragraph{X-BOT Protocol \cite{Leitao2009}} A protocol that allows influencing the way nodes are connected in a gossip overlay network to provide efficiency. Some protocol parameters that might be of interest are \textit{Passive Scan Length}, which is the number of nodes scanned in each set of optimization rounds, and \textit{Unbiased Neighbors and simply denoted}, which represents the number of "high-cost" neighbors each node keeps. %\todo{URGENTE!!! HyParView e X-BOT Estão certos????}
+%
+%
+%
+\section{Planning and Scheduling}
+\label{sec:schedule}
+\par An estimation of the schedule of work is presented in Figure~\ref{fig:gantt}. The work was planned around a set of high level tasks described bellow:
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.925]{gantt.pdf}
+	\caption{Gantt Chart Of Tasks and Their Expected Duration}
+    \label{fig:gantt}
+\end{figure}
+
+\paragraph{Initial Solution} Consists of first exploring the already implemented mechanisms in the Babel-Swarm framework for adaptation. Then, designing the \textit{Overlord} component, in a way that it can integrate with the already existing Babel features. After this, we will be designing a protocol that will run in each node of the system, which will be responsible for providing adaptive capabilities for each node. Mainly, enabling monitoring of the node itself and its environment, as well as being prepared to receive adaptation instructions and enact those changes to the corresponding protocols. Finally, the design and implementation of the intermediary node, which will be responsible for aggregating data from its neighbors and sending it to the \textit{Overlord}. This section also includes implementation of the defined case studies (Section~\ref{sec:evaluation}), including testing them in adverse environment conditions and stress testing, to test robustness. %\todo{Dei o meu melhor a descrever o que faria se fosse já amanhã, está ok?}
+\paragraph{Refined Solution} After the initial evaluation, we design and implement changes to the initial solution, resorting to the information retrieved from the first proposed solution. If any other architecture alternative could prove more viable, it will be considered during the re-designing phase. This phase also comprises the implementation of these changes and optimizations, as well as evaluation using the same case studies and environment conditions. %\todo{Melhor assim?}
+\paragraph{Writing} It comprises writing of the dissertation elaboration document, and writing a paper, that will be submitted at a conference.
