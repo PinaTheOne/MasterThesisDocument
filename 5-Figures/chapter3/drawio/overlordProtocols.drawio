@@ -1,0 +1,160 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.1 Chrome/142.0.7444.265 Electron/39.8.0 Safari/537.36" version="29.6.1" pages="4">
+  <diagram name="Overlord Protocols" id="HTHluqBrhGddv4jFKq2X">
+    <mxGraphModel dx="559" dy="298" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="8ImIJM49Qrr55Onk1k87-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="" vertex="1">
+          <mxGeometry height="170" width="280" x="240" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="8ImIJM49Qrr55Onk1k87-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;font face=&quot;Times New Roman&quot; style=&quot;font-size: 16px;&quot;&gt;Overlord&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="60" x="350" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="8ImIJM49Qrr55Onk1k87-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Overlord Manager&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="100" x="330" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="8ImIJM49Qrr55Onk1k87-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Broadcast Protocol&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="100" x="410" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="8ImIJM49Qrr55Onk1k87-5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;MON-Collect&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="80" x="250" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="8ImIJM49Qrr55Onk1k87-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Rule Engine&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="80" x="430" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="8ImIJM49Qrr55Onk1k87-7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Membership Protocol&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="110" x="250" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="8ImIJM49Qrr55Onk1k87-8" edge="1" parent="1" source="8ImIJM49Qrr55Onk1k87-7" style="endArrow=none;startArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;startFill=0;endFill=0;" target="8ImIJM49Qrr55Onk1k87-5" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="280" y="300" as="sourcePoint" />
+            <mxPoint x="330" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8ImIJM49Qrr55Onk1k87-9" edge="1" parent="1" source="8ImIJM49Qrr55Onk1k87-5" style="endArrow=none;startArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;startFill=0;endFill=0;" target="8ImIJM49Qrr55Onk1k87-3" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="280" y="240" as="sourcePoint" />
+            <mxPoint x="330" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8ImIJM49Qrr55Onk1k87-10" edge="1" parent="1" source="8ImIJM49Qrr55Onk1k87-6" style="endArrow=none;startArrow=none;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;startFill=0;endFill=0;" target="8ImIJM49Qrr55Onk1k87-3" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="470" y="230" as="sourcePoint" />
+            <mxPoint x="510" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8ImIJM49Qrr55Onk1k87-11" edge="1" parent="1" source="8ImIJM49Qrr55Onk1k87-4" style="endArrow=none;startArrow=none;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;startFill=0;endFill=0;" target="8ImIJM49Qrr55Onk1k87-6" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="370" y="330" as="sourcePoint" />
+            <mxPoint x="420" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8ImIJM49Qrr55Onk1k87-13" edge="1" parent="1" source="8ImIJM49Qrr55Onk1k87-7" style="endArrow=none;startArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;startFill=0;endFill=0;" target="8ImIJM49Qrr55Onk1k87-4" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="370" y="330" as="sourcePoint" />
+            <mxPoint x="420" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="Overlord Node Protocols" id="1Xes7mNuRpWPa7-Na8tr">
+    <mxGraphModel dx="1426" dy="761" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="Q6mzkKVQE9mMl8qPSdut-0" />
+        <mxCell id="Q6mzkKVQE9mMl8qPSdut-1" parent="Q6mzkKVQE9mMl8qPSdut-0" />
+        <mxCell id="Q6mzkKVQE9mMl8qPSdut-2" parent="Q6mzkKVQE9mMl8qPSdut-1" style="rounded=1;whiteSpace=wrap;html=1;" value="" vertex="1">
+          <mxGeometry height="170" width="280" x="240" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="Q6mzkKVQE9mMl8qPSdut-3" parent="Q6mzkKVQE9mMl8qPSdut-1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;font face=&quot;Times New Roman&quot; style=&quot;font-size: 16px;&quot;&gt;Node&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="100" x="330" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="Q6mzkKVQE9mMl8qPSdut-4" parent="Q6mzkKVQE9mMl8qPSdut-1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Node Manager&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="120" x="320" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="Q6mzkKVQE9mMl8qPSdut-5" parent="Q6mzkKVQE9mMl8qPSdut-1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Broadcast Protocol&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="100" x="410" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="Q6mzkKVQE9mMl8qPSdut-6" parent="Q6mzkKVQE9mMl8qPSdut-1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;MON-Collect&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="80" x="250" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="Q6mzkKVQE9mMl8qPSdut-7" parent="Q6mzkKVQE9mMl8qPSdut-1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Reconfiguration&lt;/font&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;Receiver&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="80" x="430" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="Q6mzkKVQE9mMl8qPSdut-8" parent="Q6mzkKVQE9mMl8qPSdut-1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Membership Protocol&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="110" x="250" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="Q6mzkKVQE9mMl8qPSdut-9" edge="1" parent="Q6mzkKVQE9mMl8qPSdut-1" source="Q6mzkKVQE9mMl8qPSdut-8" style="endArrow=none;startArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;startFill=0;endFill=0;" target="Q6mzkKVQE9mMl8qPSdut-6" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="280" y="300" as="sourcePoint" />
+            <mxPoint x="330" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Q6mzkKVQE9mMl8qPSdut-10" edge="1" parent="Q6mzkKVQE9mMl8qPSdut-1" source="Q6mzkKVQE9mMl8qPSdut-6" style="endArrow=none;startArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;startFill=0;endFill=0;" target="Q6mzkKVQE9mMl8qPSdut-4" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="280" y="240" as="sourcePoint" />
+            <mxPoint x="330" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Q6mzkKVQE9mMl8qPSdut-12" edge="1" parent="Q6mzkKVQE9mMl8qPSdut-1" source="Q6mzkKVQE9mMl8qPSdut-5" style="endArrow=none;startArrow=none;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;startFill=0;endFill=0;" target="Q6mzkKVQE9mMl8qPSdut-7" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="370" y="330" as="sourcePoint" />
+            <mxPoint x="420" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Q6mzkKVQE9mMl8qPSdut-14" edge="1" parent="Q6mzkKVQE9mMl8qPSdut-1" source="Q6mzkKVQE9mMl8qPSdut-8" style="endArrow=none;startArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;startFill=0;endFill=0;" target="Q6mzkKVQE9mMl8qPSdut-5" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="370" y="330" as="sourcePoint" />
+            <mxPoint x="420" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="lyNEc4jxZMGsHv-tSVVn" name="Overlord Protocol Stack">
+    <mxGraphModel dx="380" dy="203" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="3tLs4D0TlkXRyzMDPDRL-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Overlord Manager&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="160" x="360" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="3tLs4D0TlkXRyzMDPDRL-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;MON-Collect&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="160" x="360" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="3tLs4D0TlkXRyzMDPDRL-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Rule Engine&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="160" x="360" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="3tLs4D0TlkXRyzMDPDRL-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Broadcast Protocol&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="160" x="360" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="3tLs4D0TlkXRyzMDPDRL-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Membership Protocol&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="160" x="360" y="420" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="Overlord Node Protocol Stack" id="CNIonaUKNH_wb4xjLv1u">
+    <mxGraphModel dx="419" dy="224" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="Xd87d7hjuTB1f69Gi57D-0" />
+        <mxCell id="Xd87d7hjuTB1f69Gi57D-1" parent="Xd87d7hjuTB1f69Gi57D-0" />
+        <mxCell id="Xd87d7hjuTB1f69Gi57D-2" parent="Xd87d7hjuTB1f69Gi57D-1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Overlord Node Manager&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="160" x="360" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="Xd87d7hjuTB1f69Gi57D-3" parent="Xd87d7hjuTB1f69Gi57D-1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;MON-Collect&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="160" x="360" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="Xd87d7hjuTB1f69Gi57D-4" parent="Xd87d7hjuTB1f69Gi57D-1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Reconfiguration Receiver&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="160" x="360" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="Xd87d7hjuTB1f69Gi57D-5" parent="Xd87d7hjuTB1f69Gi57D-1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Broadcast Protocol&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="160" x="360" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="Xd87d7hjuTB1f69Gi57D-6" parent="Xd87d7hjuTB1f69Gi57D-1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Membership Protocol&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="160" x="360" y="420" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

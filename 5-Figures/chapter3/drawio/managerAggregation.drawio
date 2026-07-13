@@ -1,0 +1,166 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.1 Chrome/142.0.7444.265 Electron/39.8.0 Safari/537.36" version="29.6.1">
+  <diagram name="Page-1" id="DxRCvuJy-oSPyCYfgySH">
+    <mxGraphModel dx="864" dy="461" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="CSknMVPh3I7s5KFBGsat-1" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="160" y="80" as="sourcePoint" />
+            <mxPoint x="160" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Node Manager&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="60" x="130" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-3" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="80" y="80" as="sourcePoint" />
+            <mxPoint x="80" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-4" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Protocol &lt;i&gt;a&lt;/i&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="60" x="50" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-5" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="240" y="80" as="sourcePoint" />
+            <mxPoint x="240" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-6" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;font face=&quot;Times New Roman&quot;&gt;MON-Collect&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="200" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-7" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="80" y="160" as="sourcePoint" />
+            <mxPoint x="160" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-9" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Metrics (&lt;i&gt;n&lt;/i&gt;:1)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="80" x="80" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-10" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="240" y="120" as="sourcePoint" />
+            <mxPoint x="160" y="120" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-11" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Monitor Data&lt;/font&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;Request&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="160" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-12" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="160" y="130" as="sourcePoint" />
+            <mxPoint x="80" y="130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-13" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Collect Metrics&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="80" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-14" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="160" y="170" as="sourcePoint" />
+            <mxPoint x="240" y="170" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-15" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;font face=&quot;Times New Roman&quot;&gt;byte[]&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="80" x="160" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-16" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;dashed=1;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="330" y="240" as="sourcePoint" />
+            <mxPoint x="240" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-17" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;font face=&quot;Courier New&quot;&gt;COLLECT&lt;/font&gt;&lt;font face=&quot;Times New Roman&quot;&gt;(byte[])&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="80" x="250" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-18" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;curved=1;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <Array as="points">
+              <mxPoint x="280" y="190" />
+            </Array>
+            <mxPoint x="240" y="170" as="sourcePoint" />
+            <mxPoint x="240" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-19" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;font face=&quot;Courier New&quot;&gt;COLLECT&lt;/font&gt;&lt;font face=&quot;Times New Roman&quot;&gt;(byte[])&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="80" x="270" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-20" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="240" y="260" as="sourcePoint" />
+            <mxPoint x="160" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-21" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Aggregate Data&lt;/font&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;Request&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;[byte[], byte[]]&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="160" y="215" as="geometry" />
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-22" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;curved=1;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <Array as="points">
+              <mxPoint x="120" y="280" />
+            </Array>
+            <mxPoint x="160" y="260" as="sourcePoint" />
+            <mxPoint x="160" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-23" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=11;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Decode Data&lt;/font&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;byte[]&amp;nbsp; &amp;nbsp;n:1&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;byte[]&amp;nbsp; &amp;nbsp;n:5&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="60" x="80" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-25" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;curved=1;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <Array as="points">
+              <mxPoint x="120" y="330" />
+            </Array>
+            <mxPoint x="160" y="310" as="sourcePoint" />
+            <mxPoint x="160" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-26" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=11;" value="&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;Aggregate Data&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;n:6&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="60" x="80" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-28" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;curved=1;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <Array as="points">
+              <mxPoint x="120" y="370" />
+            </Array>
+            <mxPoint x="160" y="350" as="sourcePoint" />
+            <mxPoint x="160" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-29" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=11;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Encode Data&lt;/font&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;n:6&amp;nbsp; &amp;nbsp;byte[]&lt;br&gt;&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="60" x="80" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-31" edge="1" parent="1" style="endArrow=open;html=1;rounded=0;endFill=0;strokeWidth=0.3;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="111" y="281" as="sourcePoint" />
+            <mxPoint x="121" y="281" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-32" edge="1" parent="1" style="endArrow=open;html=1;rounded=0;endFill=0;strokeWidth=0.3;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="110" y="294" as="sourcePoint" />
+            <mxPoint x="120" y="294" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-34" edge="1" parent="1" style="endArrow=open;html=1;rounded=0;endFill=0;strokeWidth=0.3;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="99" y="378" as="sourcePoint" />
+            <mxPoint x="109" y="378" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-35" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="160" y="410" as="sourcePoint" />
+            <mxPoint x="240" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CSknMVPh3I7s5KFBGsat-36" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=11;" value="&lt;font face=&quot;Times New Roman&quot;&gt;Receive Aggregated Data&lt;/font&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;byte[]&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="80" x="160" y="360" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
